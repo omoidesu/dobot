@@ -38,7 +38,8 @@ class BotClient(AsyncRegisterObject):
         return res.json()
 
     async def __ws_connect(self):
-        async for websocket in websockets.connect(self.__ws_url_dict["data"]["endpoint"], ping_interval=None,
+        async for websocket in websockets.connect(self.__ws_url_dict["data"]["endpoint"],
+                                                  ping_interval=None,
                                                   logger=None):
             try:
                 await asyncio.gather(self._ws_heart_beat(websocket), self._receive_ws_msg(websocket))
@@ -51,8 +52,3 @@ class BotClient(AsyncRegisterObject):
         if not self._loop:
             self._loop = asyncio.get_event_loop()
         self._loop.run_until_complete(self.__ws_connect())
-
-
-if __name__ == "__main__":
-    bot_client = BotClient("83199120", "ODMxOTkxMjA.77-9LAnvv70.4-jInox-uI8LTujPQZASLRGcxd_mn5twL-55m0LK7xc")
-    bot_client.run()
