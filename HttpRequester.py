@@ -88,6 +88,7 @@ class HttpRequester(LogAbstractObject):
 
 
 if __name__ == "__main__":
+    a = AuthCell("83199120", "ODMxOTkxMjA.77-9LAnvv70.4-jInox-uI8LTujPQZASLRGcxd_mn5twL-55m0LK7xc")
     h = HttpRequester(True)
-    AuthCell("83199120", "ODMxOTkxMjA.77-9LAnvv70.4-jInox-uI8LTujPQZASLRGcxd_mn5twL-55m0LK7xc")
+    print(a.bot_id)
     asyncio.run(h.request("POST", DodoApiEnum.WS_CLIENT_GETTER_URL.value, headers={"Content-Type": "application/json"}))
