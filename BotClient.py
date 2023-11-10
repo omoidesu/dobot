@@ -2,7 +2,7 @@ import websockets, requests, json, time, asyncio
 
 from DodoApiEnum import DodoApiEnum
 from interface.AsyncRegisterObject import AsyncRegisterObject
-from logger import MyLogger
+from Logging import MyLogger
 
 logger = MyLogger()
 
