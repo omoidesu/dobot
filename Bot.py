@@ -5,6 +5,11 @@ from interface.AsyncRegisterObject import AsyncRegisterObject
 
 
 class Bot(AsyncRegisterObject):
+    """
+    Bot 核心类
+    """
+    __ws: BotClient
+
     def __init__(self, bot_id: str, bot_token: str):
         AuthCell(bot_id, bot_token)
         self.__ws = BotClient()

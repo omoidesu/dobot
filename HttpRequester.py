@@ -1,5 +1,4 @@
 import asyncio
-import time
 
 from aiohttp import ClientSession
 
@@ -7,7 +6,7 @@ from AuthCell import AuthCell
 from DodoApiEnum import DodoApiEnum
 from Logging import MyLogger
 from interface.LogAbstractObject import LogAbstractObject
-from wrapper.ClassLoggerWrapper import ClassLoggerWrapper
+from wrapper.ClassLoggerWrapper import class_logger_wrapper
 
 __all__ = ["HttpRequester", "POST", "GET", "PUT", "DELETE"]
 
@@ -19,14 +18,14 @@ DELETE = "DELETE"
 logger = MyLogger()
 
 
-@ClassLoggerWrapper
+@class_logger_wrapper
 class HttpRequester(LogAbstractObject):
     _print_time_logger: bool = False
     _cs: ClientSession = None
 
-    def __init__(self, print_time_logger: bool = None):
-        self._auth_cell = AuthCell()
-        if print_time_logger is not None:
+    def __init__(self, print_time_logger: bool = False):
+        self._auth_cell = AuthCell.get_instance()
+        if print_time_logger:
             self._print_time_logger = print_time_logger
 
     def __del__(self):
@@ -36,7 +35,7 @@ class HttpRequester(LogAbstractObject):
     def time_logger_wrapper(self, print_time_logger: bool = False):
         def decorator(func):
             def wrapper(*args, **kwargs):
-                pass
+                ...
 
             return wrapper
 
@@ -44,8 +43,8 @@ class HttpRequester(LogAbstractObject):
 
     def async_time_logger_wrapper(self, print_time_logger: bool = False):
         def decorator(func):
-            def wrapper(*args, **kwargs):
-                pass
+            async def wrapper(*args, **kwargs):
+                ...
 
             return wrapper
 
@@ -61,35 +60,19 @@ class HttpRequester(LogAbstractObject):
             if self._cs is None:
                 self._cs = ClientSession()
             print(params)
-            async with self._cs.request(method, f'{DodoApiEnum.BASE_API_URL.value}{route}', **params) as res:
-                if res.content_type == 'application/json':
-                    rsp = await res.json()
+            async with self._cs.request(method, f'{DodoApiEnum.BASE_API_URL.value}{route}', **params) as resp:
+                if resp.content_type == 'application/json':
+                    rsp = await resp.json()
                     # if rsp['code'] != 0:
                     #     raise HttpRequester.APIRequestFailed(method, route, params, rsp['code'], rsp['message'])
                     # rsp = rsp['data']
                 else:
-                    rsp = await res.read()
+                    rsp = await resp.read()
 
                 logger.debug(f'{method} {route}: rsp: {rsp}')
                 return rsp
 
         return await request(method, route, **params)
-
-    class APIRequestFailed(Exception):
-        """
-        This class is copied from khl.py /khl/requester.py
-        """
-
-        def __init__(self, method, route, params, err_code, err_message):
-            super().__init__()
-            self.method = method
-            self.route = route
-            self.params = params
-            self.err_code = err_code
-            self.err_message = err_message
-
-        def __str__(self):
-            return f"Requesting '{self.method} {self.route}' failed with {self.err_code}: {self.err_message}"
 
 
 if __name__ == "__main__":
@@ -97,4 +80,8 @@ if __name__ == "__main__":
         a = AuthCell("83199120", "ODMxOTkxMjA.77-9LAnvv70.4-jInox-uI8LTujPQZASLRGcxd_mn5twL-55m0LK7xc")
         h = HttpRequester(True)
         await h.request("POST", DodoApiEnum.WS_CLIENT_GETTER_URL.value, headers={"Content-Type": "application/json"})
-    asyncio.run(run())
+
+
+    # asyncio.run(run())
+    # asyncio.get_event_loop().run_until_complete(run())
+    asyncio.new_event_loop().run_until_complete(run())

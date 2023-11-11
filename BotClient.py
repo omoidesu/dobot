@@ -1,5 +1,6 @@
 import asyncio
 import json
+
 import requests
 import websockets
 
@@ -12,8 +13,12 @@ logger = MyLogger()
 
 
 class BotClient(AsyncRegisterObject):
+    """
+    websocket客户端
+    """
+
     def __init__(self) -> None:
-        self.__auth_cell = AuthCell()
+        self.__auth_cell = AuthCell.get_instance()
         self.__bot_id: str = self.__auth_cell.bot_id
         self.__bot_token: str = self.__auth_cell.bot_token
         self.__ws_url_dict: dict = {}
@@ -21,7 +26,7 @@ class BotClient(AsyncRegisterObject):
     @staticmethod
     async def _ws_heart_beat(ws):
         while True:
-            await asyncio.sleep(1)  # ws要求30s的心跳相应，这里设置14s应对网络突发情况
+            await asyncio.sleep(14)  # ws要求30s的心跳相应，这里设置14s应对网络突发情况
             await ws.send('{"type": 1}')  # 心跳数据
 
     @staticmethod
