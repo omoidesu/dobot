@@ -82,6 +82,4 @@ if __name__ == "__main__":
         await h.request("POST", DodoApiEnum.WS_CLIENT_GETTER_URL.value, headers={"Content-Type": "application/json"})
 
 
-    # asyncio.run(run())
-    # asyncio.get_event_loop().run_until_complete(run())
     asyncio.new_event_loop().run_until_complete(run())
