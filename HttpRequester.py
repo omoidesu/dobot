@@ -17,6 +17,7 @@ DELETE = "DELETE"
 
 logger = MyLogger()
 
+
 @ClassLoggerWrapper
 class HttpRequester(LogAbstractObject):
     _print_time_logger: bool = False
@@ -84,7 +85,6 @@ class HttpRequester(LogAbstractObject):
 
         def __str__(self):
             return f"Requesting '{self.method} {self.route}' failed with {self.err_code}: {self.err_message}"
-
 
 
 if __name__ == "__main__":

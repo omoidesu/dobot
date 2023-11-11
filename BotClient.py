@@ -1,9 +1,12 @@
-import websockets, requests, json, time, asyncio
+import asyncio
+import json
+import requests
+import websockets
 
 from AuthCell import AuthCell
 from DodoApiEnum import DodoApiEnum
-from interface.AsyncRegisterObject import AsyncRegisterObject
 from Logging import MyLogger
+from interface.AsyncRegisterObject import AsyncRegisterObject
 
 logger = MyLogger()
 

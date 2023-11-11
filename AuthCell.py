@@ -9,7 +9,7 @@ class AuthCell:
         else:
             return cls._instances[cls]
 
-    def __init__(self, bot_id = None, bot_token = None):
+    def __init__(self, bot_id=None, bot_token=None):
         if not hasattr(self, 'initialized'):
             self.bot_id = bot_id
             self.bot_token = bot_token
