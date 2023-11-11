@@ -1,4 +1,5 @@
 import asyncio
+import time
 
 from aiohttp import ClientSession
 
@@ -27,6 +28,10 @@ class HttpRequester(LogAbstractObject):
         self._auth_cell = AuthCell()
         if print_time_logger is not None:
             self._print_time_logger = print_time_logger
+
+    def __del__(self):
+        if self._cs is not None:
+            asyncio.gather(self._cs.close())
 
     def time_logger_wrapper(self, print_time_logger: bool = False):
         def decorator(func):
@@ -88,7 +93,8 @@ class HttpRequester(LogAbstractObject):
 
 
 if __name__ == "__main__":
-    a = AuthCell("83199120", "ODMxOTkxMjA.77-9LAnvv70.4-jInox-uI8LTujPQZASLRGcxd_mn5twL-55m0LK7xc")
-    h = HttpRequester(True)
-    print(a.bot_id)
-    asyncio.run(h.request("POST", DodoApiEnum.WS_CLIENT_GETTER_URL.value, headers={"Content-Type": "application/json"}))
+    async def run():
+        a = AuthCell("83199120", "ODMxOTkxMjA.77-9LAnvv70.4-jInox-uI8LTujPQZASLRGcxd_mn5twL-55m0LK7xc")
+        h = HttpRequester(True)
+        await h.request("POST", DodoApiEnum.WS_CLIENT_GETTER_URL.value, headers={"Content-Type": "application/json"})
+    asyncio.run(run())
