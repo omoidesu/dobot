@@ -29,3 +29,6 @@ class Client:
             raise MessageTypeError(self.__allow_message_type__)
 
         return await self.request(Route.SET_CHANNEL_MESSAGE_EDIT, **kwargs)
+
+    async def delete_public_message(self, **kwargs):
+        return await self.request(Route.SET_CHANNEL_MESSAGE_WITHDRAW, **kwargs)

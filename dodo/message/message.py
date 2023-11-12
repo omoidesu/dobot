@@ -72,7 +72,11 @@ class PublicMessage(Message):
         return await self._bot.client.edit_public_message(**kwargs)
 
     async def delete(self, reason: str):
-        ...
+        kwargs = {'messageId': self.msg_id}
+        if reason:
+            kwargs['reason'] = reason
+
+        return await self._bot.client.delete_public_message(**kwargs)
 
     async def fetch_emoji_list(self):
         ...

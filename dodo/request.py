@@ -1,5 +1,5 @@
 import asyncio
-from typing import Union
+import json
 
 from aiohttp import ClientSession
 
@@ -76,7 +76,9 @@ class HttpRequester(LogAbstractObject):
             if self._cs is None:
                 self._cs = ClientSession()
 
-            async with self._cs.post(route, **kwargs, headers=AuthCell.get_instance().header) as response:
+            data = json.dumps(kwargs)
+
+            async with self._cs.post(route, data=data, headers=AuthCell.get_instance().header) as response:
                 if response.status != 200:
                     raise RequestError(response.status, route)
 
