@@ -3,7 +3,9 @@ class AuthCell:
     用于存储 Bot 的 ID 和 Token
     单例
     """
+    _initialized: bool = False
     _instance: 'AuthCell' = None
+    _header: dict = {"Content-Type": "application/json"}
 
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
@@ -16,7 +18,12 @@ class AuthCell:
             self.bot_id = bot_id
             self.bot_token = bot_token
             self.initialized = True
+            self._header['Authorization'] = f'Bot {self.bot_id}.{self.bot_token}'
 
     @classmethod
     def get_instance(cls):
         return cls._instance
+
+    @property
+    def header(self):
+        return self._header

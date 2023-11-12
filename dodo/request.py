@@ -1,19 +1,14 @@
 import asyncio
+from typing import Union
 
 from aiohttp import ClientSession
 
-from AuthCell import AuthCell
-from DodoApiEnum import DodoApiEnum
-from Logging import MyLogger
-from interface.LogAbstractObject import LogAbstractObject
-from wrapper.ClassLoggerWrapper import class_logger_wrapper
-
-__all__ = ["HttpRequester", "POST", "GET", "PUT", "DELETE"]
-
-POST = "POST"
-GET = "GET"
-PUT = "PUT"
-DELETE = "DELETE"
+from .cert import AuthCell
+from .const import Route
+from .exception import ApiRequestError, RequestError
+from .interface.LogAbstractObject import LogAbstractObject
+from .log import MyLogger
+from .wrapper.ClassLoggerWrapper import class_logger_wrapper
 
 logger = MyLogger()
 
@@ -50,7 +45,7 @@ class HttpRequester(LogAbstractObject):
 
         return decorator
 
-    async def request(self, method: str, route: str, **params):
+    """async def request(self, method: str, route: str, **params):
         @self.async_time_logger_wrapper(self._print_time_logger)
         async def request(method: str, route: str, **params):
             headers = params.pop('headers', {})
@@ -60,7 +55,7 @@ class HttpRequester(LogAbstractObject):
             if self._cs is None:
                 self._cs = ClientSession()
             print(params)
-            async with self._cs.request(method, f'{DodoApiEnum.BASE_API_URL.value}{route}', **params) as resp:
+            async with self._cs.request(method, f'{Route.BASE_API_URL}{route}', **params) as resp:
                 if resp.content_type == 'application/json':
                     rsp = await resp.json()
                     # if rsp['code'] != 0:
@@ -72,14 +67,35 @@ class HttpRequester(LogAbstractObject):
                 logger.debug(f'{method} {route}: rsp: {rsp}')
                 return rsp
 
-        return await request(method, route, **params)
+        return await request(method, route, **params)"""
+
+    async def request(self, route: str, **kwargs):
+        @self.async_time_logger_wrapper(self._print_time_logger)
+        async def do_request(route: str, **kwargs):
+            print("do_request")
+            if self._cs is None:
+                self._cs = ClientSession()
+
+            async with self._cs.post(route, **kwargs, headers=AuthCell.get_instance().header) as response:
+                if response.status != 200:
+                    raise RequestError(response.status, route)
+
+                data = await response.json()
+                if status := data.get("status", -9999) != 0:
+                    raise ApiRequestError(response.status, route, kwargs, status, data.get("message", ""))
+
+            return data
+
+        return await do_request(route, **kwargs)
 
 
 if __name__ == "__main__":
     async def run():
-        a = AuthCell("83199120", "ODMxOTkxMjA.77-9LAnvv70.4-jInox-uI8LTujPQZASLRGcxd_mn5twL-55m0LK7xc")
+        AuthCell("83199120", "ODMxOTkxMjA.77-9LAnvv70.4-jInox-uI8LTujPQZASLRGcxd_mn5twL-55m0LK7xc")
         h = HttpRequester(True)
-        await h.request("POST", DodoApiEnum.WS_CLIENT_GETTER_URL.value, headers={"Content-Type": "application/json"})
+        # await h.request("POST", Route.WS_CLIENT_GETTER_URL, headers={"Content-Type": "application/json"})
+        bot_info = await h.request(Route.GET_BOT_INFO.value)
+        print(bot_info)
 
 
     asyncio.new_event_loop().run_until_complete(run())

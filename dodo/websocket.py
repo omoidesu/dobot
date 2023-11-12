@@ -4,10 +4,10 @@ import json
 import requests
 import websockets
 
-from AuthCell import AuthCell
-from DodoApiEnum import DodoApiEnum
-from Logging import MyLogger
-from interface.AsyncRegisterObject import AsyncRegisterObject
+from .cert import AuthCell
+from .const import Route
+from .log import MyLogger
+from .interface.AsyncRegisterObject import AsyncRegisterObject
 
 logger = MyLogger()
 
@@ -44,7 +44,7 @@ class BotClient(AsyncRegisterObject):
             "Content-Type": "application/json",
             "Authorization": f"Bot {self.__bot_id}.{self.__bot_token}"
         }
-        res = requests.post(DodoApiEnum.BASE_API_URL.value + DodoApiEnum.WS_CLIENT_GETTER_URL.value, headers=headers)
+        res = requests.post(Route.GET_WEBSOCKET_CONNECTION.value, headers=headers)
         return res.json()
 
     async def __ws_connect(self):
