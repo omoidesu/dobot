@@ -3,9 +3,7 @@ import asyncio
 from dodo.const import EventType
 from dodo.interface.message import Message
 from dodo.log import MyLogger
-from dodo.message.body import parse_message_body
 from dodo.message.publicMessage import PublicMessage
-
 
 logger = MyLogger()
 

@@ -7,8 +7,8 @@ import websockets
 from .cert import AuthCell
 from .const import Route
 from .handler import EventHandler
-from .log import MyLogger
 from .interface.AsyncRegisterObject import AsyncRegisterObject
+from .log import MyLogger
 
 logger = MyLogger()
 
