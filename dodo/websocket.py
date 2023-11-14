@@ -25,8 +25,8 @@ class BotClient(AsyncRegisterObject):
         self.__bot_token: str = self.__auth_cell.bot_token
         self.__ws_url_dict: dict = {}
 
-    def _parser_receive_msg(self, msg):
-        pass
+    def _parser_receive_msg(self, msg: dict):
+        self.__handler._handle_msg(msg)
 
     @staticmethod
     async def _ws_heart_beat(ws):
@@ -34,15 +34,15 @@ class BotClient(AsyncRegisterObject):
             await asyncio.sleep(14)  # ws要求30s的心跳相应，这里设置14s应对网络突发情况
             await ws.send('{"type": 1}')  # 心跳数据
 
-    @staticmethod
-    async def _receive_ws_msg(ws):
+    async def _receive_ws_msg(self, ws):
         while True:
             recv_text = await ws.recv()
             msg_dict = json.loads(recv_text)
             if msg_dict["type"] == 1:
                 logger.debug("##### ws connection heart beat #####")
             else:
-                logger.debug(f"服务器接收信息: {bytes.decode(recv_text)}")
+                logger.debug(f"服务器接收信息: {msg_dict}")
+                self._parser_receive_msg(msg_dict)
 
     def __get_ws_url(self):
         headers = {

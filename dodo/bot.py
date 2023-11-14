@@ -19,7 +19,7 @@ class Bot(AsyncRegisterObject):
     def __init__(self, bot_id: str, bot_token: str, log_time: bool = False):
         AuthCell(bot_id, bot_token)
         self.__handler = EventHandler()
-        self.__ws = BotClient()
+        self.__ws = BotClient(self.__handler)
         self.client = Client(log_time)
 
     def prefix(self, prefix: str = None):

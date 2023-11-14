@@ -1,8 +1,13 @@
+import asyncio
+
 from dodo.const import EventType
 from dodo.interface.message import Message
+from dodo.log import MyLogger
 from dodo.message.body import parse_message_body
 from dodo.message.publicMessage import PublicMessage
 
+
+logger = MyLogger()
 
 class EventHandler:
     _prefix: str
@@ -34,16 +39,23 @@ class EventHandler:
             pass
 
     def _handle_cmd_msg(self, msg: Message):
-        pass
+        try:
+            awaitable_func = self._filter_msg_cmd(msg)
+            return asyncio.gather(awaitable_func())
+        except Exception as e:
+            logger.debug(e)
 
     def _handle_event_msg(self, msg: Message):
         pass
 
-    def _filter_msg_cmd(self, cmd_with_prefix: str):
-        awaitable_func = self._handler_map.get(cmd_with_prefix, False)
-        if not awaitable_func:
-            raise Exception("Dont fetch cmd")
-        return awaitable_func
+    def _filter_msg_cmd(self, msg: Message) -> asyncio.coroutine:
+        _msg_content_ls = msg.body.content.split(" ")
+        if len(_msg_content_ls) > 0:
+            _cmd_with_prefix = _msg_content_ls[0]
+            awaitable_func = self._handler_map.get(_cmd_with_prefix, False)
+            if not awaitable_func:
+                raise Exception("Dont fetch cmd")
+            return awaitable_func
 
     def _register_msg_event(self, cmd: str, prefix_ls: set[str], func):
         _msg_command_dict = self._handler_map.get("msg", {})
