@@ -1,44 +1,17 @@
 from typing import Union
 
 from dodo import Bot
+from dodo.client import Client
 from dodo.const import MessageType
 from dodo.exception.typeError import MessageTypeError
+from dodo.interface.message import Message
 from dodo.message.body import MessageBody, TextMessage
 from dodo.message.context import Context
 
 
-class Message:
-    _bot: Bot
-    msg_id: str
-    msg_type: MessageType
-    ctx: Context
-    body: MessageBody
-
-    async def reply(self, content: Union[str, MessageBody]):
-        ...
-
-    async def edit(self, content: Union[str, MessageBody]):
-        ...
-
-    async def delete(self, reason: str):
-        ...
-
-    async def fetch_emoji_list(self):
-        ...
-
-    async def fetch_emoji_user(self, emoji: str):
-        ...
-
-    async def add_reaction(self, emoji: str):
-        ...
-
-    async def delete_reaction(self, emoji: str, user_id: str):
-        ...
-
-
 class PublicMessage(Message):
     def __init__(self, bot: Bot, msg_id: str, msg_type: MessageType, ctx: Context, body: MessageBody):
-        self._bot = bot
+        self._client = Client()
         self.msg_id = msg_id
         self.msg_type = msg_type
         self.ctx = ctx
@@ -69,14 +42,14 @@ class PublicMessage(Message):
             'messageBody': str(content)
         }
 
-        return await self._bot.client.edit_public_message(**kwargs)
+        return await self._client.edit_public_message(**kwargs)
 
     async def delete(self, reason: str):
         kwargs = {'messageId': self.msg_id}
         if reason:
             kwargs['reason'] = reason
 
-        return await self._bot.client.delete_public_message(**kwargs)
+        return await self._client.delete_public_message(**kwargs)
 
     async def fetch_emoji_list(self):
         ...
