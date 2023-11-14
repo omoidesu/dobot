@@ -1,6 +1,6 @@
 import asyncio
 
-from dodo.const import EventType
+from dodo.const import EventType, MessageType
 from dodo.interface.message import Message
 from dodo.log import MyLogger
 from dodo.message.publicMessage import PublicMessage
@@ -37,7 +37,9 @@ class EventHandler:
         _event_type = _data.get("eventType", None)
         if _event_type == EventType.CHANNEL_MESSAGE.value:
             _msg = PublicMessage(_event_body)
-            self._handle_cmd_msg(_msg)
+            # 只有文字类型的才会进cmd_msg，其他待定
+            if _msg.msg_type == MessageType.TEXT.value:
+                self._handle_cmd_msg(_msg)
         else:
             pass
 
