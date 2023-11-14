@@ -64,7 +64,10 @@ class BotClient(AsyncRegisterObject):
                 continue
 
     def run(self):
-        self.__ws_url_dict = self.__get_ws_url()
-        if not self._loop:
-            self._loop = asyncio.get_event_loop()
-        self._loop.run_until_complete(self.__ws_connect())
+        try:
+            self.__ws_url_dict = self.__get_ws_url()
+            if not self._loop:
+                self._loop = asyncio.get_event_loop()
+            self._loop.run_until_complete(self.__ws_connect())
+        except KeyboardInterrupt:
+            logger.info("see you next time")
