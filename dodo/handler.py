@@ -7,6 +7,7 @@ from dodo.message.publicMessage import PublicMessage
 
 logger = MyLogger()
 
+
 class EventHandler:
     _prefix: str
     _handler_map: dict
@@ -15,7 +16,7 @@ class EventHandler:
         self._prefix = prefix
         self._handler_map = {}
 
-    def _reset_prefix(self, prefix: str):
+    def reset_prefix(self, prefix: str):
         """
         设置全局的指令前缀
         :param prefix: 触发指令前缀
@@ -26,7 +27,7 @@ class EventHandler:
         else:
             self._prefix = '.'
 
-    def _handle_msg(self, msg_dict: dict):
+    def handle_msg(self, msg_dict: dict):
         """
         将ws返回参数解析成对应Event的Msg
         :param msg_dict: ws返回的解析后的msg
@@ -77,7 +78,7 @@ class EventHandler:
                 raise Exception("Dont fetch cmd")
             return awaitable_func
 
-    def _register_msg_event(self, cmd: str, prefix_ls: set, func):
+    def register_msg_event(self, cmd: str, prefix_ls: set, func):
         """
         注册命令至handler中等待调度
         :param cmd: 指令触发字符串

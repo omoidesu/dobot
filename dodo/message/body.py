@@ -12,9 +12,16 @@ class MessageBody:
         self.message_type = message_type
 
     def __str__(self):
-        dict__ = self.__dict__
-        dict__.pop('message_type')
-        return json.dumps(dict__)
+        return json.dumps(self.dict())
+
+    def dict(self):
+        result = {}
+
+        for k, v in self.__dict__.items():
+            if k != 'message_type':
+                result[k] = v
+
+        return result
 
 
 class TextMessage(MessageBody):
@@ -87,4 +94,4 @@ def parse_message_body(msg_type: str, event_body: dict) -> MessageBody:
         _message_body = event_body.get("messageBody", {})
         return TextMessage(_message_body.get("content", ""))
     else:
-        pass
+        ...

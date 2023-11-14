@@ -1,3 +1,8 @@
+from dodo.channel import Channel
+from dodo.island import Island
+from dodo.user import User
+
+
 class Context:
     _island: Island
     _channel: Channel

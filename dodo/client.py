@@ -32,3 +32,6 @@ class Client:
 
     async def delete_public_message(self, **kwargs):
         return await self.request(Route.SET_CHANNEL_MESSAGE_WITHDRAW, **kwargs)
+
+    async def add_public_message_reaction(self, **kwargs):
+        return await self.request(Route.SET_CHANNEL_MESSAGE_REACTION_ADD, **kwargs)

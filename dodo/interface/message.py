@@ -3,13 +3,13 @@ from typing import Union
 
 from dodo.const import MessageType
 from dodo.message.body import MessageBody
-# from dodo.message.context import Context
+from dodo.message.context import Context
 
 
 class Message(ABC):
     msg_id: str
     msg_type: MessageType
-    # ctx: Context
+    ctx: Context
     body: MessageBody
 
     async def reply(self, content: Union[str, MessageBody]):

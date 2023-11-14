@@ -26,7 +26,7 @@ class BotClient(AsyncRegisterObject):
         self.__ws_url_dict: dict = {}
 
     def _parser_receive_msg(self, msg: dict):
-        self.__handler._handle_msg(msg)
+        self.__handler.handle_msg(msg)
 
     @staticmethod
     async def _ws_heart_beat(ws):
@@ -39,7 +39,8 @@ class BotClient(AsyncRegisterObject):
             recv_text = await ws.recv()
             msg_dict = json.loads(recv_text)
             if msg_dict["type"] == 1:
-                logger.debug("##### ws connection heart beat #####")
+                # logger.debug("##### ws connection heart beat #####")
+                pass
             else:
                 logger.debug(f"服务器接收信息: {msg_dict}")
                 self._parser_receive_msg(msg_dict)

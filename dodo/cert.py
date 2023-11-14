@@ -6,6 +6,7 @@ class AuthInfo:
     _initialized: bool = False
     _instance: 'AuthInfo' = None
     _header: dict = {"Content-Type": "application/json"}
+    _bot_id: str = ""
 
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
@@ -27,3 +28,11 @@ class AuthInfo:
     @property
     def header(self):
         return self._header
+
+    @property
+    def me(self):
+        return self._bot_id
+
+    @me.setter
+    def me(self, bot_id: str):
+        self._bot_id = bot_id

@@ -45,40 +45,14 @@ class HttpRequester(LogAbstractObject):
 
         return decorator
 
-    """async def request(self, method: str, route: str, **params):
-        @self.async_time_logger_wrapper(self._print_time_logger)
-        async def request(method: str, route: str, **params):
-            headers = params.pop('headers', {})
-            params['headers'] = headers
-
-            headers['Authorization'] = f'Bot {self._auth_cell.bot_id}.{self._auth_cell.bot_token}'
-            if self._cs is None:
-                self._cs = ClientSession()
-            print(params)
-            async with self._cs.request(method, f'{Route.BASE_API_URL}{route}', **params) as resp:
-                if resp.content_type == 'application/json':
-                    rsp = await resp.json()
-                    # if rsp['code'] != 0:
-                    #     raise HttpRequester.APIRequestFailed(method, route, params, rsp['code'], rsp['message'])
-                    # rsp = rsp['data']
-                else:
-                    rsp = await resp.read()
-
-                logger.debug(f'{method} {route}: rsp: {rsp}')
-                return rsp
-
-        return await request(method, route, **params)"""
-
     async def request(self, route: str, **kwargs):
         @self.async_time_logger_wrapper(self._print_time_logger)
         async def do_request(route: str, **kwargs):
-            print("do_request")
             if self._cs is None:
                 self._cs = ClientSession()
 
-            data = json.dumps(kwargs)
-
-            async with self._cs.post(route, data=data, headers=AuthInfo.get_instance().header) as response:
+            async with self._cs.post(route, data=json.dumps(kwargs),
+                                     headers=AuthInfo.get_instance().header) as response:
                 if response.status != 200:
                     raise RequestError(response.status, route)
 
