@@ -6,6 +6,7 @@ import websockets
 
 from .cert import AuthCell
 from .const import Route
+from .handler import EventHandler
 from .log import MyLogger
 from .interface.AsyncRegisterObject import AsyncRegisterObject
 
@@ -17,11 +18,15 @@ class BotClient(AsyncRegisterObject):
     websocket客户端
     """
 
-    def __init__(self) -> None:
+    def __init__(self, handler: EventHandler) -> None:
         self.__auth_cell = AuthCell.get_instance()
+        self.__handler: EventHandler = handler
         self.__bot_id: str = self.__auth_cell.bot_id
         self.__bot_token: str = self.__auth_cell.bot_token
         self.__ws_url_dict: dict = {}
+
+    def _parser_receive_msg(self, msg):
+        pass
 
     @staticmethod
     async def _ws_heart_beat(ws):

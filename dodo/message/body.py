@@ -80,3 +80,11 @@ class RedPacketMessage(MessageBody):
     total_amount: float
     receiver_type: int
     role_id: list
+
+
+def parse_message_body(msg_type: str, event_body: dict) -> MessageBody:
+    if msg_type == MessageType.TEXT:
+        _message_body = event_body.get("messageBody", {})
+        return TextMessage(_message_body.get("content", ""))
+    else:
+        pass

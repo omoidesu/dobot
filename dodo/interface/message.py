@@ -1,3 +1,4 @@
+from abc import ABC
 from typing import Union
 
 from dodo.const import MessageType
@@ -5,7 +6,7 @@ from dodo.message.body import MessageBody
 from dodo.message.context import Context
 
 
-class Message:
+class Message(ABC):
     msg_id: str
     msg_type: MessageType
     ctx: Context

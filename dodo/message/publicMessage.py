@@ -5,17 +5,18 @@ from dodo.client import Client
 from dodo.const import MessageType
 from dodo.exception.typeError import MessageTypeError
 from dodo.interface.message import Message
-from dodo.message.body import MessageBody, TextMessage
+from dodo.message.body import MessageBody, TextMessage, parse_message_body
 from dodo.message.context import Context
 
 
 class PublicMessage(Message):
-    def __init__(self, bot: Bot, msg_id: str, msg_type: MessageType, ctx: Context, body: MessageBody):
+    def __init__(self, event_body: dict):
         self._client = Client()
-        self.msg_id = msg_id
-        self.msg_type = msg_type
-        self.ctx = ctx
-        self.body = body
+        self.msg_id = event_body.get("messageId", '')
+        self.msg_type = event_body.get('messageType', '')
+        # self.ctx = ctx
+        _body = parse_message_body(event_body["messageType"], event_body)
+        self.body = _body
 
     async def reply(self, content: Union[str, MessageBody]):
         if isinstance(content, str):
@@ -28,7 +29,7 @@ class PublicMessage(Message):
             'referencedMessageId': self.msg_id,
         }
 
-        return await self._bot.client.send_public_message(**kwargs)
+        return await self._client.send_public_message(**kwargs)
 
     async def edit(self, content: Union[str, MessageBody]):
         if isinstance(content, str):
@@ -52,7 +53,7 @@ class PublicMessage(Message):
         return await self._client.delete_public_message(**kwargs)
 
     async def fetch_emoji_list(self):
-        ...
+        raise Exception("Public msg event dont have fetch_emoji_list method!")
 
     async def fetch_emoji_user(self, emoji: str):
         ...

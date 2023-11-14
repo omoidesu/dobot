@@ -1,4 +1,8 @@
+from typing import Union
+
 from dodo.client import Client
+from dodo.handler import EventHandler
+from dodo.interface.message import Message
 from .cert import AuthCell
 from .interface.AsyncRegisterObject import AsyncRegisterObject
 from .websocket import BotClient
@@ -9,12 +13,40 @@ class Bot(AsyncRegisterObject):
     Bot 核心类
     """
     __ws: BotClient
+    __handler: EventHandler
     client: Client
 
     def __init__(self, bot_id: str, bot_token: str, log_time: bool = False):
         AuthCell(bot_id, bot_token)
+        self.__handler = EventHandler()
         self.__ws = BotClient()
         self.client = Client(log_time)
+
+    def prefix(self, prefix: str = None):
+        """
+        设置全局通用的指令前缀
+        :param prefix: 指令前缀
+        :return: None
+        """
+        self.__handler._reset_prefix(prefix)
+
+    def on_message(self, cmd: str, prefix: Union[list, tuple] = ()):
+        """
+        消息事件的装饰器方法，用于处理消息类的业务
+        :param cmd: 触发指令
+        :param prefix: 指令前缀
+        :return: 被装饰方法的返回值
+        """
+        def decorator(func):
+            async def wrapper(msg: Message, *args, **kwargs):
+                res = await func(msg, *args, **kwargs)
+                return res
+
+            self.__handler._register_msg_event(cmd, set(prefix), wrapper)
+            return wrapper
+
+        return decorator
+
 
     def run(self):
         return self.__ws.run()
