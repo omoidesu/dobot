@@ -72,6 +72,9 @@ RESPONSE_STATUS_CODE = {
     10104: '本群未开启积分系统'
 }
 
+# 文字消息中at成员的正则表达式
+MENTION_PATTERN = r"<@!(\d+)>"
+
 
 class Route(Enum):
     # API地址
@@ -228,28 +231,29 @@ class MessageType(Enum):
     # 红包消息
     RED_PACKET = 7
 
+
 class EventType(Enum):
     # 频道消息
-    CHANNEL_MESSAGE = '2001' # 消息事件
-    EMOJI_REACTION = '3001' # 消息表情反应事件
-    CARD_BUTTON_CLICK = '3002' # 卡片消息按钮事件
-    CARD_FORM_SUBMISSION = '3003' # 卡片消息表单回传事件
-    CARD_LIST_SUBMISSION = '3004' # 卡片消息列表回传事件
+    CHANNEL_MESSAGE = '2001'  # 消息事件
+    EMOJI_REACTION = '3001'  # 消息表情反应事件
+    CARD_BUTTON_CLICK = '3002'  # 卡片消息按钮事件
+    CARD_FORM_SUBMISSION = '3003'  # 卡片消息表单回传事件
+    CARD_LIST_SUBMISSION = '3004'  # 卡片消息列表回传事件
     # 语音频道
-    MEMBER_JOIN_VOICE_CHANNEL = '5001' # 成员加入语音频道事件
-    MEMBER_EXIT_VOICE_CHANNEL = '5002' # 成员退出语音频道事件
+    MEMBER_JOIN_VOICE_CHANNEL = '5001'  # 成员加入语音频道事件
+    MEMBER_EXIT_VOICE_CHANNEL = '5002'  # 成员退出语音频道事件
     # 帖子频道
-    POST_PUBLISH = '6001' # 帖子发布事件
-    POST_COMMENT_REPLY = '6002' # 帖子评论回复事件
+    POST_PUBLISH = '6001'  # 帖子发布事件
+    POST_COMMENT_REPLY = '6002'  # 帖子评论回复事件
     # 成员
-    MEMBER_JOIN = 4001 # 成员加入事件
-    MEMBER_EXIT = '4002' # 成员退出事件
-    MEMBER_INVITATION = '4003' # 成员邀请事件
+    MEMBER_JOIN = 4001  # 成员加入事件
+    MEMBER_EXIT = '4002'  # 成员退出事件
+    MEMBER_INVITATION = '4003'  # 成员邀请事件
     # 赠礼系统
-    GIFT_SUCCESS = '7001' # 赠礼成功事件
+    GIFT_SUCCESS = '7001'  # 赠礼成功事件
     # 积分系统
-    POINT_CHANGE = '8001' # 积分变更事件
+    POINT_CHANGE = '8001'  # 积分变更事件
     # 商城系统
-    PURCHASE_SUCCESS = '9001' # 商品购买成功事件
+    PURCHASE_SUCCESS = '9001'  # 商品购买成功事件
     # 私信
-    PRIVATE_MESSAGE = '1001' # 私信事件
+    PRIVATE_MESSAGE = '1001'  # 私信事件

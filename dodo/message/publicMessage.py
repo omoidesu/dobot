@@ -1,3 +1,4 @@
+import re
 from typing import Union
 
 import emoji as emoji_lib
@@ -5,6 +6,7 @@ import emoji as emoji_lib
 from dodo.cert import AuthInfo
 from dodo.channel import Channel
 from dodo.client import Client
+from dodo.const import MENTION_PATTERN, MessageType
 from dodo.exception.argumentError import ArgError
 from dodo.exception.typeError import MessageTypeError
 from dodo.interface.message import Message
@@ -15,6 +17,8 @@ from dodo.user import User
 
 
 class PublicMessage(Message):
+    mention: tuple
+
     def __init__(self, event_body: dict):
         self._client = Client()
         self.msg_id = event_body.get("messageId", '')
@@ -22,6 +26,9 @@ class PublicMessage(Message):
         self.ctx = PublicMessage._context_builder(event_body)
         _body = parse_message_body(event_body["messageType"], event_body)
         self.body = _body
+
+        if self.body.message_type == MessageType.TEXT:
+            self.mention = tuple(set(re.findall(MENTION_PATTERN, self.body.content)))
 
     @staticmethod
     def _context_builder(event_body: dict) -> Context:

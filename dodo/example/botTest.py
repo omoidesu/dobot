@@ -14,7 +14,11 @@ bot = Bot(bot_info.get("client_id"), bot_info.get("token"))
 @bot.on_message("ping", prefix=['/', '.', ','])
 async def ping(msg: Message):
     print("我是业务方法")
+    # at成员id
+    print(msg.mention)
+    # 回复消息
     reply_message: Message = await msg.reply("pong!")
+    # 给回复的消息添加回应
     await reply_message.add_reaction("👍")
 
 
