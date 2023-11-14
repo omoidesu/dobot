@@ -32,7 +32,7 @@ class EventHandler:
         _data = msg_dict.get("data", {})
         _event_body = _data.get("eventBody", None)
         _event_type = _data.get("eventType", None)
-        if _event_type == EventType.CHANNEL_MESSAGE:
+        if _event_type == EventType.CHANNEL_MESSAGE.value:
             _msg = PublicMessage(_event_body)
             self._handle_cmd_msg(_msg)
         else:
@@ -57,7 +57,7 @@ class EventHandler:
                 raise Exception("Dont fetch cmd")
             return awaitable_func
 
-    def _register_msg_event(self, cmd: str, prefix_ls: set[str], func):
+    def _register_msg_event(self, cmd: str, prefix_ls: set, func):
         _msg_command_dict = self._handler_map.get("msg", {})
         for item in prefix_ls:
             _msg_command_dict[item + cmd] = func

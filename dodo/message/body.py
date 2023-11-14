@@ -83,7 +83,7 @@ class RedPacketMessage(MessageBody):
 
 
 def parse_message_body(msg_type: str, event_body: dict) -> MessageBody:
-    if msg_type == MessageType.TEXT:
+    if msg_type == MessageType.TEXT.value:
         _message_body = event_body.get("messageBody", {})
         return TextMessage(_message_body.get("content", ""))
     else:

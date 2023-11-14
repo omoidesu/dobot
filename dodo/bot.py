@@ -1,11 +1,11 @@
 from typing import Union
 
+from dodo.cert import AuthCell
 from dodo.client import Client
 from dodo.handler import EventHandler
+from dodo.interface.AsyncRegisterObject import AsyncRegisterObject
 from dodo.interface.message import Message
-from .cert import AuthCell
-from .interface.AsyncRegisterObject import AsyncRegisterObject
-from .websocket import BotClient
+from dodo.websocket import BotClient
 
 
 class Bot(AsyncRegisterObject):

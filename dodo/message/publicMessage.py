@@ -1,12 +1,10 @@
 from typing import Union
 
-from dodo import Bot
 from dodo.client import Client
-from dodo.const import MessageType
 from dodo.exception.typeError import MessageTypeError
 from dodo.interface.message import Message
 from dodo.message.body import MessageBody, TextMessage, parse_message_body
-from dodo.message.context import Context
+# from dodo.message.context import Context
 
 
 class PublicMessage(Message):
