@@ -4,7 +4,7 @@ import json
 import requests
 import websockets
 
-from .cert import AuthCell
+from .cert import AuthInfo
 from .const import Route
 from .handler import EventHandler
 from .interface.AsyncRegisterObject import AsyncRegisterObject
@@ -19,7 +19,7 @@ class BotClient(AsyncRegisterObject):
     """
 
     def __init__(self, handler: EventHandler) -> None:
-        self.__auth_cell = AuthCell.get_instance()
+        self.__auth_cell = AuthInfo.get_instance()
         self.__handler: EventHandler = handler
         self.__bot_id: str = self.__auth_cell.bot_id
         self.__bot_token: str = self.__auth_cell.bot_token

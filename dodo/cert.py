@@ -1,10 +1,10 @@
-class AuthCell:
+class AuthInfo:
     """
     用于存储 Bot 的 ID 和 Token
     单例
     """
     _initialized: bool = False
-    _instance: 'AuthCell' = None
+    _instance: 'AuthInfo' = None
     _header: dict = {"Content-Type": "application/json"}
 
     def __new__(cls, *args, **kwargs):

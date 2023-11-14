@@ -3,7 +3,7 @@ import json
 
 from aiohttp import ClientSession
 
-from .cert import AuthCell
+from .cert import AuthInfo
 from .const import Route
 from .exception import ApiRequestError, RequestError
 from .interface.LogAbstractObject import LogAbstractObject
@@ -19,7 +19,7 @@ class HttpRequester(LogAbstractObject):
     _cs: ClientSession = None
 
     def __init__(self, print_time_logger: bool = False):
-        self._auth_cell = AuthCell.get_instance()
+        self._auth_cell = AuthInfo.get_instance()
         if print_time_logger:
             self._print_time_logger = print_time_logger
 
@@ -78,7 +78,7 @@ class HttpRequester(LogAbstractObject):
 
             data = json.dumps(kwargs)
 
-            async with self._cs.post(route, data=data, headers=AuthCell.get_instance().header) as response:
+            async with self._cs.post(route, data=data, headers=AuthInfo.get_instance().header) as response:
                 if response.status != 200:
                     raise RequestError(response.status, route)
 
@@ -94,7 +94,7 @@ class HttpRequester(LogAbstractObject):
 
 if __name__ == "__main__":
     async def run():
-        AuthCell("83199120", "ODMxOTkxMjA.77-9LAnvv70.4-jInox-uI8LTujPQZASLRGcxd_mn5twL-55m0LK7xc")
+        AuthInfo("83199120", "ODMxOTkxMjA.77-9LAnvv70.4-jInox-uI8LTujPQZASLRGcxd_mn5twL-55m0LK7xc")
         h = HttpRequester(True)
         # await h.request("POST", Route.WS_CLIENT_GETTER_URL, headers={"Content-Type": "application/json"})
         bot_info = await h.request(Route.GET_BOT_INFO.value)

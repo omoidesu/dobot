@@ -1,6 +1,6 @@
 from typing import Union
 
-from dodo.cert import AuthCell
+from dodo.cert import AuthInfo
 from dodo.client import Client
 from dodo.handler import EventHandler
 from dodo.interface.AsyncRegisterObject import AsyncRegisterObject
@@ -17,7 +17,7 @@ class Bot(AsyncRegisterObject):
     client: Client
 
     def __init__(self, bot_id: str, bot_token: str, log_time: bool = False):
-        AuthCell(bot_id, bot_token)
+        AuthInfo(bot_id, bot_token)
         self.__handler = EventHandler()
         self.__ws = BotClient(self.__handler)
         self.client = Client(log_time)
