@@ -58,6 +58,7 @@ class BotClient(AsyncRegisterObject):
                                                   ping_interval=None,
                                                   logger=None):
             try:
+                logger.info("bot 启动成功")
                 await asyncio.gather(self._ws_heart_beat(websocket), self._receive_ws_msg(websocket))
             except websockets.ConnectionClosed:
                 logger.error("ws连接中断，正在重新连接")

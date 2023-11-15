@@ -1,6 +1,17 @@
 import json
+import re
 
 from dodo.const import MessageType
+
+
+class Content:
+    pre_mention: tuple
+    prefix: str
+    content: str
+    mention: tuple
+
+    def __init__(self, content_msg):
+        pass
 
 
 class MessageBody:

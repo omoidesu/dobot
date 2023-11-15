@@ -1,4 +1,5 @@
 import asyncio
+from typing import Callable
 
 from dodo.const import EventType, MessageType
 from dodo.interface.message import Message
@@ -8,13 +9,59 @@ from dodo.message.publicMessage import PublicMessage
 logger = MyLogger()
 
 
+class HandlerMap:
+    """
+    存放被调度函数的类
+    _msg: 消息类型的被调度方法字典
+    _event: 其他触发事件类型的被调度方法字典
+    """
+    _msg: dict
+    _event: dict
+
+    def __init__(self):
+        self._msg = {}
+        self._event = {}
+
+    @property
+    def msg(self):
+        return self._msg
+
+    @msg.setter
+    def msg(self, msg: dict):
+        self._msg = msg
+
+    @property
+    def event(self):
+        return self._event
+
+    @event.setter
+    def event(self, event: dict):
+        self._event = event
+
+class DispatchMethod:
+    _func: Callable
+    _at_flag: bool
+
+    def __init__(self, func: Callable, at_flag: bool = False):
+        self._func = func
+        self._at_flag = at_flag
+
+    @property
+    def func(self):
+        return self._func
+
+    @property
+    def at_flag(self):
+        return self._at_flag
+
+
 class EventHandler:
     _prefix: str
-    _handler_map: dict
+    _handler_map: HandlerMap
 
     def __init__(self, prefix: str = '.'):
         self._prefix = prefix
-        self._handler_map = {}
+        self._handler_map = HandlerMap()
 
     def reset_prefix(self, prefix: str):
         """
@@ -73,7 +120,7 @@ class EventHandler:
         _msg_content_ls = msg.body.content.split(" ")
         if len(_msg_content_ls) > 0:
             _cmd_with_prefix = _msg_content_ls[0]
-            awaitable_func = self._handler_map.get("msg", {}).get(_cmd_with_prefix, False)
+            awaitable_func = self._handler_map.msg.get(_cmd_with_prefix, False)
             if not awaitable_func:
                 raise Exception("Dont fetch cmd")
             return awaitable_func
@@ -86,9 +133,9 @@ class EventHandler:
         :param func: 被调度函数
         :return:
         """
-        _msg_command_dict = self._handler_map.get("msg", {})
+        _msg_command_dict = self._handler_map.msg
         if len(prefix_ls) == 0:
             prefix_ls = {self._prefix}
         for item in prefix_ls:
             _msg_command_dict[item + cmd] = func
-        self._handler_map["msg"] = _msg_command_dict
+        self._handler_map.msg = _msg_command_dict

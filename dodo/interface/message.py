@@ -11,6 +11,7 @@ class Message(ABC):
     msg_type: MessageType
     ctx: Context
     body: MessageBody
+    mention: tuple
 
     async def reply(self, content: Union[str, MessageBody]):
         ...

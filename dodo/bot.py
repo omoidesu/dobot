@@ -32,7 +32,10 @@ class Bot(AsyncRegisterObject):
         """
         self.__handler.reset_prefix(prefix)
 
-    def on_message(self, cmd: str, prefix: Union[list, tuple] = ()):
+    def on_message(self,
+                   cmd: str,
+                   prefix: Union[list, tuple] = (),
+                   at_bot: bool = False):
         """
         消息事件的装饰器方法，用于处理消息类的业务
         :param cmd: 触发指令
