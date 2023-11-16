@@ -1,5 +1,5 @@
 import asyncio
-from typing import Callable
+from typing import Callable, Union
 
 from dodo.const import EventType, MessageType
 from dodo.interface.message import Message
@@ -120,14 +120,21 @@ class EventHandler:
         _msg_content_ls = msg.body.content.split(" ")
         if len(_msg_content_ls) > 0:
             _cmd_with_prefix = _msg_content_ls[0]
-            awaitable_func = self._handler_map.msg.get(_cmd_with_prefix, False)
+            awaitable_func: Union[DispatchMethod, bool] = self._handler_map.msg.get(_cmd_with_prefix, False)
             if not awaitable_func:
                 raise Exception("Dont fetch cmd")
-            return awaitable_func
+            # if awaitable_func.at_flag:
+            #     if self._au
+            return awaitable_func.func
 
-    def register_msg_event(self, cmd: str, prefix_ls: set, func):
+    def register_msg_event(self,
+                           cmd: str,
+                           prefix_ls: set,
+                           at_bot: bool,
+                           func: Callable):
         """
         注册命令至handler中等待调度
+        :param at_bot: 是否at bot才能使用
         :param cmd: 指令触发字符串
         :param prefix_ls: 前缀列表
         :param func: 被调度函数
@@ -137,5 +144,5 @@ class EventHandler:
         if len(prefix_ls) == 0:
             prefix_ls = {self._prefix}
         for item in prefix_ls:
-            _msg_command_dict[item + cmd] = func
+            _msg_command_dict[item + cmd] = DispatchMethod(func, at_bot)
         self._handler_map.msg = _msg_command_dict

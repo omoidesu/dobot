@@ -1,24 +1,44 @@
 import json
 import re
 
-from dodo.const import MessageType
+from dodo.const import MessageType, MENTION_PATTERN
 
 
 class Content:
     pre_mention: tuple
     prefix: str
     content: str
+    content_list: list
     mention: tuple
 
     def __init__(self, content_msg):
-        pass
+        self.content = content_msg.strip()
+        self.content_list = []
+        _msg_ls = self.content.split(' ')
+        _pre_flag = True
+        _pre_mention_ls = []
+        for item in _msg_ls:
+            if _pre_flag and item.startswith('<@!'):
+                _pre_mention_ls.append(item[3:-1])
+            else:
+                _pre_flag = False
+                if not hasattr(self, 'prefix'):
+                    self.prefix = item
+                else:
+                    self.content_list.append(item)
+        self.pre_mention = tuple(_pre_mention_ls)
+        self.mention = tuple(set(re.findall(MENTION_PATTERN, self.content)))
 
+    def __repr__(self):
+        return self.content
 
 class MessageBody:
+    content_info: Content
     content: str
     message_type: MessageType
 
     def __init__(self, content, message_type):
+        self.content_info = Content(content)
         self.content = content
         self.message_type = message_type
 
@@ -29,7 +49,7 @@ class MessageBody:
         result = {}
 
         for k, v in self.__dict__.items():
-            if k != 'message_type':
+            if k not in ('message_type', 'content_info'):
                 result[k] = v
 
         return result

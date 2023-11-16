@@ -17,7 +17,6 @@ from dodo.user import User
 
 
 class PublicMessage(Message):
-    mention: tuple
 
     def __init__(self, event_body: dict):
         self._client = Client()
@@ -27,8 +26,13 @@ class PublicMessage(Message):
         _body = parse_message_body(event_body["messageType"], event_body)
         self.body = _body
 
-        if self.body.message_type == MessageType.TEXT:
-            self.mention = tuple(set(re.findall(MENTION_PATTERN, self.body.content)))
+    @property
+    def mention(self):
+        return self.body.content_info.mention
+
+    @property
+    def pre_mention(self):
+        return self.body.content_info.pre_mention
 
     @staticmethod
     def _context_builder(event_body: dict) -> Context:

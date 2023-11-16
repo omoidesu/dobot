@@ -48,7 +48,7 @@ class Bot(AsyncRegisterObject):
                 res = await func(msg, *args, **kwargs)
                 return res
 
-            self.__handler.register_msg_event(cmd, set(prefix), wrapper)
+            self.__handler.register_msg_event(cmd, set(prefix), at_bot, wrapper)
             return wrapper
 
         return decorator
