@@ -40,6 +40,7 @@ class Bot(AsyncRegisterObject):
         消息事件的装饰器方法，用于处理消息类的业务
         :param cmd: 触发指令
         :param prefix: 指令前缀
+        :param at_bot: 是否@bot才能使用
         :return: 被装饰方法的返回值
         """
 
@@ -49,6 +50,30 @@ class Bot(AsyncRegisterObject):
                 return res
 
             self.__handler.register_msg_event(cmd, set(prefix), at_bot, wrapper)
+            return wrapper
+
+        return decorator
+
+    def on_reaction(self,
+                    island_id_list: Union[list, tuple] = ("*",),
+                    channel_id_list: Union[list, tuple] = ("*",),
+                    emoji_list: list = ("*",),
+                    reaction_type: int = None):
+        """
+        消息事件的装饰器方法，用于处理表情反应类的业务
+        :param island_id_list: 群ID列表
+        :param channel_id_list: 频道ID列表
+        :param emoji_list: emoji列表
+        :param reaction_type: 反应类型（0-删除 1-新增）
+        :return:
+        """
+
+        def decorator(func):
+            async def wrapper(msg: Message, *args, **kwargs):
+                res = await func(msg, *args, **kwargs)
+                return res
+
+            self.__handler.register_reaction_event(set(island_id_list), set(channel_id_list), set(emoji_list), reaction_type)
             return wrapper
 
         return decorator

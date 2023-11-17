@@ -13,15 +13,18 @@ logger = MyLogger()
 class HandlerMap:
     """
     存放被调度函数的类
-    _msg: 消息类型的被调度方法字典
+    _msg: 消息类型的被调度方法字典 key: 带前缀的指令 value: 被调度方法
     _event: 其他触发事件类型的被调度方法字典
+    _reaction: 消息表情反应时间的被调度方法字典
     """
     _msg: dict
     _event: dict
+    _reaction: dict
 
     def __init__(self):
         self._msg = {}
         self._event = {}
+        self._reaction = {}
 
     @property
     def msg(self):
@@ -91,6 +94,7 @@ class EventHandler:
             # 只有文字类型的才会进cmd_msg，其他待定
             if _msg.msg_type == MessageType.TEXT.value:
                 self._handle_cmd_msg(_msg)
+        # elif _event_type == EventType.EMOJI_REACTION.value:
         else:
             pass
 
@@ -112,7 +116,7 @@ class EventHandler:
         :param msg: ws返回的msg实体信息
         :return: 被调度方法
         """
-        pass
+        return self._handler_map.event.get()
 
     def _filter_msg_cmd(self, msg: PublicMessage) -> asyncio.coroutine:
         """
@@ -126,7 +130,6 @@ class EventHandler:
             if not awaitable_func:
                 raise Exception("Dont fetch cmd")
             if awaitable_func.at_flag:
-                msg: PublicMessage
                 # 如果是需要atbot才能用，需要校验pre_mention里有没有bot的id
                 if self.__auth_info.me not in msg.pre_mention:
                     raise Exception("cmd need at bot")
@@ -139,9 +142,9 @@ class EventHandler:
                            func: Callable):
         """
         注册命令至handler中等待调度
-        :param at_bot: 是否at bot才能使用
         :param cmd: 指令触发字符串
         :param prefix_ls: 前缀列表
+        :param at_bot: 是否at bot才能使用
         :param func: 被调度函数
         :return:
         """
@@ -151,3 +154,18 @@ class EventHandler:
         for item in prefix_ls:
             _msg_command_dict[item + cmd] = DispatchMethod(func, at_bot)
         self._handler_map.msg = _msg_command_dict
+
+    def register_reaction_event(self,
+                           island_id_list: set,
+                           channel_id_list: set,
+                           emoji_list: set,
+                           reaction_type: int):
+        """
+        消息事件的装饰器方法，用于处理表情反应类的业务
+        :param island_id_list: 群ID列表
+        :param channel_id_list: 频道ID列表
+        :param emoji_list: emoji列表
+        :param reaction_type: 反应类型（0-删除 1-新增）
+        :return:
+        """
+        ...
