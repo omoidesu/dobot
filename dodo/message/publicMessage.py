@@ -17,6 +17,11 @@ from dodo.user import User
 
 
 class PublicMessage(Message):
+    _client: Client
+    msg_id: str
+    msg_type: MessageType
+    ctx: Context
+    body: MessageBody
 
     def __init__(self, event_body: dict):
         self._client = Client()

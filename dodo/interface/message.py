@@ -1,22 +1,24 @@
 from abc import ABC
 from typing import Union
 
+from dodo.client import Client
 from dodo.const import MessageType
-from dodo.message.body import MessageBody
+from dodo.interface.bodyAbstractObject import Body
 from dodo.message.context import Context
 
 
 class Message(ABC):
+    _client: Client
     msg_id: str
     msg_type: MessageType
     ctx: Context
-    body: MessageBody
+    body: Body
     mention: tuple
 
-    async def reply(self, content: Union[str, MessageBody]):
+    async def reply(self, content: Union[str, Body]):
         ...
 
-    async def edit(self, content: Union[str, MessageBody]):
+    async def edit(self, content: Union[str, Body]):
         ...
 
     async def delete(self, reason: str):

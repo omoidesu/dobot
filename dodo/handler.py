@@ -1,6 +1,7 @@
 import asyncio
 from typing import Callable, Union
 
+from dodo.cert import AuthInfo
 from dodo.const import EventType, MessageType
 from dodo.interface.message import Message
 from dodo.log import MyLogger
@@ -58,10 +59,12 @@ class DispatchMethod:
 class EventHandler:
     _prefix: str
     _handler_map: HandlerMap
+    __auth_info: AuthInfo
 
     def __init__(self, prefix: str = '.'):
         self._prefix = prefix
         self._handler_map = HandlerMap()
+        self.__auth_info = AuthInfo.get_instance()
 
     def reset_prefix(self, prefix: str):
         """
@@ -91,7 +94,7 @@ class EventHandler:
         else:
             pass
 
-    def _handle_cmd_msg(self, msg: Message):
+    def _handle_cmd_msg(self, msg: PublicMessage):
         """
         处理消息事件的方法
         :param msg: ws返回的msg实体信息
@@ -111,20 +114,22 @@ class EventHandler:
         """
         pass
 
-    def _filter_msg_cmd(self, msg: Message) -> asyncio.coroutine:
+    def _filter_msg_cmd(self, msg: PublicMessage) -> asyncio.coroutine:
         """
         消息类型的msg过滤器，返回被调度的方法
         :param msg: ws返回的msg实体信息
         :return: 被调度方法
         """
-        _msg_content_ls = msg.body.content.split(" ")
-        if len(_msg_content_ls) > 0:
-            _cmd_with_prefix = _msg_content_ls[0]
-            awaitable_func: Union[DispatchMethod, bool] = self._handler_map.msg.get(_cmd_with_prefix, False)
+        _msg_content = msg.body.content.strip()
+        if _msg_content != '':
+            awaitable_func: Union[DispatchMethod, bool] = self._handler_map.msg.get(msg.body.content_info.prefix, False)
             if not awaitable_func:
                 raise Exception("Dont fetch cmd")
-            # if awaitable_func.at_flag:
-            #     if self._au
+            if awaitable_func.at_flag:
+                msg: PublicMessage
+                # 如果是需要atbot才能用，需要校验pre_mention里有没有bot的id
+                if self.__auth_info.me not in msg.pre_mention:
+                    raise Exception("cmd need at bot")
             return awaitable_func.func
 
     def register_msg_event(self,

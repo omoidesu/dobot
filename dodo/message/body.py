@@ -2,6 +2,7 @@ import json
 import re
 
 from dodo.const import MessageType, MENTION_PATTERN
+from dodo.interface.bodyAbstractObject import Body
 
 
 class Content:
@@ -32,7 +33,16 @@ class Content:
     def __repr__(self):
         return self.content
 
-class MessageBody:
+    def __dict__(self):
+        return {
+            "pre_mention": self.pre_mention,
+            "prefix": self.prefix,
+            "content": self.content,
+            "content_list": self.content_list,
+            "mention": self.mention
+        }
+
+class MessageBody(Body):
     content_info: Content
     content: str
     message_type: MessageType
@@ -66,7 +76,7 @@ class ImageMessage(MessageBody):
     height: int
     original: bool
 
-    def __(self, url, width, height, original):
+    def __init__(self, url, width, height, original):
         super().__init__(url, MessageType.IMAGE)
         self.url = url
         self.width = width
