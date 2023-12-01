@@ -1,4 +1,4 @@
-class ArgError(Exception):
+class ArgumentError(Exception):
     _message: str
 
     def __init__(self, message: str):
@@ -8,5 +8,5 @@ class ArgError(Exception):
         return self._message
 
 
-class InitializationError(ArgError):
+class InitializationError(ArgumentError):
     ...

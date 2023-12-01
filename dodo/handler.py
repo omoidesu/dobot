@@ -3,9 +3,9 @@ from typing import Callable, Union
 
 from dodo.cert import AuthInfo
 from dodo.const import EventType, MessageType
+from dodo.eventMessage.msg import Msg
 from dodo.interface.message import Message
 from dodo.log import MyLogger
-from dodo.message.publicMessage import PublicMessage
 
 logger = MyLogger()
 
@@ -90,15 +90,15 @@ class EventHandler:
         _event_body = _data.get("eventBody", None)
         _event_type = _data.get("eventType", None)
         if _event_type == EventType.CHANNEL_MESSAGE.value:
-            _msg = PublicMessage(_event_body)
+            _msg = Msg(_event_body)
             # 只有文字类型的才会进cmd_msg，其他待定
-            if _msg.msg_type == MessageType.TEXT.value:
+            if _msg.message_type == MessageType.TEXT.value:
                 self._handle_cmd_msg(_msg)
         # elif _event_type == EventType.EMOJI_REACTION.value:
         else:
             pass
 
-    def _handle_cmd_msg(self, msg: PublicMessage):
+    def _handle_cmd_msg(self, msg: Msg):
         """
         处理消息事件的方法
         :param msg: ws返回的msg实体信息
@@ -118,7 +118,7 @@ class EventHandler:
         """
         return self._handler_map.event.get()
 
-    def _filter_msg_cmd(self, msg: PublicMessage) -> asyncio.coroutine:
+    def _filter_msg_cmd(self, msg: Msg) -> asyncio.coroutine:
         """
         消息类型的msg过滤器，返回被调度的方法
         :param msg: ws返回的msg实体信息
@@ -126,7 +126,7 @@ class EventHandler:
         """
         _msg_content = msg.body.content.strip()
         if _msg_content != '':
-            awaitable_func: Union[DispatchMethod, bool] = self._handler_map.msg.get(msg.body.content_info.prefix, False)
+            awaitable_func: Union[DispatchMethod, bool] = self._handler_map.msg.get(msg.body.content.prefix, False)
             if not awaitable_func:
                 raise Exception("Dont fetch cmd")
             if awaitable_func.at_flag:

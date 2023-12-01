@@ -4,7 +4,7 @@ from typing import Union
 from dodo.client import Client
 from dodo.const import MessageType
 from dodo.interface.bodyAbstractObject import Body
-from dodo.message.context import Context
+from dodo.messagebak.context import Context
 
 
 class Message(ABC):

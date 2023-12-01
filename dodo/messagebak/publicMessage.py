@@ -7,12 +7,12 @@ from dodo.cert import AuthInfo
 from dodo.channel import Channel
 from dodo.client import Client
 from dodo.const import MENTION_PATTERN, MessageType
-from dodo.exception.argumentError import ArgError
+from dodo.exception.argumentError import ArgumentError
 from dodo.exception.typeError import MessageTypeError
 from dodo.interface.message import Message
 from dodo.island import Island
-from dodo.message.body import MessageBody, TextMessage, parse_message_body
-from dodo.message.context import Context
+from dodo.messagebak.body import MessageBody, TextMessage, parse_message_body
+from dodo.messagebak.context import Context
 from dodo.user import User
 
 
@@ -108,7 +108,7 @@ class PublicMessage(Message):
         if len(emoji) != 1:
             target_emoji = emoji_lib.emojize(emoji, language='alias')
             if target_emoji == emoji:
-                raise ArgError("emoji must be a single emoji or a shortcode")
+                raise ArgumentError("emoji must be a single emoji or a shortcode")
         else:
             target_emoji = emoji
 

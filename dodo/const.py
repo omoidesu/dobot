@@ -1,5 +1,7 @@
 from enum import Enum
 
+SUCCESS = 0
+
 # 返回码
 RESPONSE_STATUS_CODE = {
     0: '成功',

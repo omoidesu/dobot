@@ -89,7 +89,7 @@ class Bot(AsyncRegisterObject):
         status = response_json.get("status", -9999)
         if status != 0:
             raise ApiRequestError(response.status_code, Route.GET_BOT_INFO.value, {}, status,
-                                  response_json.get("message", ""))
+                                  response_json.get("messagebak", ""))
 
         AuthInfo.get_instance().me = response_json.get("data", {}).get("dodoSourceId")
 
