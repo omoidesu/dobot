@@ -6,6 +6,7 @@ from dodo.eventMessage.message.context import Context
 class FileMsg(BaseMsg):
     _MESSAGE_TYPE = MessageType.FILE.value
     _ctx: Context
+
     def __init__(self, message_body: dict):
         self._url = message_body.get('url', '')
         self._name = message_body.get('name', '')

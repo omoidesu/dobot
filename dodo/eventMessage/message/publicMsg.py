@@ -11,6 +11,7 @@ from dodo.functional import CachedProperty
 class PublicMsg(BaseMsg):
     _MESSAGE_TYPE = MessageType.TEXT.value
     _ctx: Context
+
     def __init__(self, message_body=None, content: str = ''):
         if message_body is None:
             message_body = {}

@@ -6,6 +6,7 @@ from dodo.eventMessage.message.context import Context
 class ImageMsg(BaseMsg):
     _MESSAGE_TYPE = MessageType.IMAGE.value
     _ctx: Context
+
     def __init__(self, message_body: dict):
         self._url = message_body.get('url', '')
         self._width = message_body.get('width', 0)

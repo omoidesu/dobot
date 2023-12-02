@@ -6,6 +6,7 @@ from dodo.eventMessage.message.context import Context
 class ShareMsg(BaseMsg):
     _MESSAGE_TYPE = MessageType.SHARE.value
     _ctx: Context
+
     def __init__(self, message_body: dict):
         self._jump_url = message_body.get('jumpUrl', '')
 

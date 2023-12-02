@@ -40,7 +40,6 @@ class Msg:
         else:
             raise ValueError(f"Invalid Message Type! need 1-7 but {message_type} was given")
 
-
     def __init__(self, event_body: dict):
         """
         存放msg的主体类，包含所有msg相关信息
@@ -64,7 +63,7 @@ class Msg:
         # msg
         self.body = self.parseMsg(self.message_type, event_body)
 
-        #context
+        # context
         __user = User(
             id=self.dodo_source_id,
             personal_nickname=self.personal.nick_name,
@@ -109,12 +108,8 @@ class Msg:
         return Msg(_event_body)
 
 
-
-
-
-
 if __name__ == "__main__":
-    event_body =  {
+    event_body = {
         "islandSourceId": "44659",
         "channelId": "118506",
         "dodoSourceId": "681856",

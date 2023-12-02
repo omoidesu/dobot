@@ -7,6 +7,7 @@ from dodo.eventMessage.message.context import Context
 class CardMsg(BaseMsg):
     _MESSAGE_TYPE = MessageType.CARD.value
     _ctx: Context
+
     def __init__(self, message_body: dict):
         self._content = Content(message_body.get('content', ''))
         self._card = message_body.get('card', '')

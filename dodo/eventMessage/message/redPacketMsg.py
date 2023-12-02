@@ -6,6 +6,7 @@ from dodo.eventMessage.message.context import Context
 class RedPacketMsg(BaseMsg):
     _MESSAGE_TYPE = MessageType.RED_PACKET.value
     _ctx: Context
+
     def __init__(self, message_body: dict):
         self._type = message_body.get('type', 0)
         self._count = message_body.get('count', 0)
