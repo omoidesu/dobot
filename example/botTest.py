@@ -3,7 +3,6 @@ import time
 
 from dodo import Bot
 from dodo.eventMessage.msg import Msg
-from dodo.interface.message import Message
 
 with open("bot.json", "r", encoding="utf-8") as f:
     bot_info = json.load(f)

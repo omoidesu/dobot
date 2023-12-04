@@ -4,7 +4,6 @@ from typing import Callable, Union
 from dodo.cert import AuthInfo
 from dodo.const import EventType, MessageType
 from dodo.eventMessage.msg import Msg
-from dodo.interface.message import Message
 from dodo.log import MyLogger
 
 logger = MyLogger()
@@ -110,7 +109,7 @@ class EventHandler:
         except Exception as e:
             logger.debug(e)
 
-    def _handle_event_msg(self, msg: Message):
+    def _handle_event_msg(self, msg: Msg):
         """
         处理非消息事件的方法
         :param msg: ws返回的msg实体信息

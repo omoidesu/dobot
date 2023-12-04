@@ -3,10 +3,10 @@ from typing import Union
 from dodo.cert import AuthInfo
 from dodo.client import Client
 from dodo.const import Route
+from dodo.eventMessage.msg import Msg
 from dodo.exception import ApiRequestError, RequestError
 from dodo.handler import EventHandler
 from dodo.interface.AsyncRegisterObject import AsyncRegisterObject
-from dodo.interface.message import Message
 from dodo.websocket import BotClient
 
 
@@ -45,7 +45,7 @@ class Bot(AsyncRegisterObject):
         """
 
         def decorator(func):
-            async def wrapper(msg: Message, *args, **kwargs):
+            async def wrapper(msg: Msg, *args, **kwargs):
                 res = await func(msg, *args, **kwargs)
                 return res
 
@@ -69,7 +69,7 @@ class Bot(AsyncRegisterObject):
         """
 
         def decorator(func):
-            async def wrapper(msg: Message, *args, **kwargs):
+            async def wrapper(msg: Msg, *args, **kwargs):
                 res = await func(msg, *args, **kwargs)
                 return res
 
