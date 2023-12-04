@@ -33,7 +33,7 @@ import json
 # bot主类
 from dobot import Bot
 # 服务器返回消息解析后的Msg类，内含消息类型API的封装方法
-from dobot.eventMessage.msg import Msg
+from dobot import Msg
 
 # 读取bot配置信息
 with open("bot.json", "r", encoding="utf-8") as f:
