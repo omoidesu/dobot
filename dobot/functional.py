@@ -1,3 +1,6 @@
+import copy
+
+
 class CachedProperty:
     """
     这是个装饰器，作用是把被装饰的方法变成只读的，并且缓存第一次拿到的数据，后面再拿就直接从缓存里拿了
@@ -40,8 +43,29 @@ class CachedProperty:
 class CachedClass:
     """
     这是一个单例管理装饰器，作用是把被装饰的类变成单例模式
-    通过_label参数来区分不同的实例，只有参数中存在_label参数时才会启用单例模式
+    通过_label参数来区分不同的实例，只有实例化参数中存在_label参数时才会启用单例模式
     注意：这个装饰器只能用在类上，不能用在方法上，且被装饰的类__init__方法中不能有_label参数，否则会被装饰器捕获生成唯一实例
+
+    example:
+
+    @CachedClass
+    class Test:
+        def __init__(self, test_arg):
+            self.test_arg = test_arg
+
+    # 启用单例模式
+    test_instance_1 = Test("test_arg", _label="label_1")
+    test_instance_2 = Test("test_arg", _label="label_12345")
+    test_instance_3 = Test("test_arg", _label="label_1")
+    # 不启用单例模式
+    test_not_instance = Test("test_arg")
+
+    print(test_instance_1) # <__main__.Test object at 0x0000019008D1A948>
+    print(test_instance_2) # <__main__.Test object at 0x0000019008D1D088>
+    print(test_instance_3) # <__main__.Test object at 0x0000019008D1A948>
+    print(test_not_instance) # <__main__.Test object at 0x0000019008D1D548>
+
+    # 1=3且!=2，说明1和3是同一个实例，2是另一个实例
     """
 
     _instance_dict: dict
@@ -55,7 +79,14 @@ class CachedClass:
         self.__doc__ = getattr(cls, '__doc__')
 
     def __call__(self, *args, **kwargs):
-        _label = kwargs.get("_label", None)
+        _label = kwargs.pop("_label", None)
+        _args_label_flag = kwargs.pop("_args_label_flag", False)
+        if _args_label_flag:
+            label_kwargs = copy.deepcopy(kwargs)
+            label_kwargs["args"]: tuple = args
+            label_kwargs = dict(sorted(label_kwargs.items(), key=lambda x: x[0]))
+            # label_kwargs = set(label_kwargs)
+            _label = str(label_kwargs)
         if _label is None:
             return self._real_cls(*args, **kwargs)
         if _label not in self._instance_dict:
