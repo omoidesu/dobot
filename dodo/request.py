@@ -64,15 +64,3 @@ class HttpRequester(LogAbstractObject):
             return data
 
         return await do_request(route, **kwargs)
-
-
-if __name__ == "__main__":
-    async def run():
-        AuthInfo("83199120", "ODMxOTkxMjA.77-9LAnvv70.4-jInox-uI8LTujPQZASLRGcxd_mn5twL-55m0LK7xc")
-        h = HttpRequester(True)
-        # await h.request("POST", Route.WS_CLIENT_GETTER_URL, headers={"Content-Type": "application/json"})
-        bot_info = await h.request(Route.GET_BOT_INFO.value)
-        print(bot_info)
-
-
-    asyncio.new_event_loop().run_until_complete(run())

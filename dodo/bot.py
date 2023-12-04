@@ -94,8 +94,3 @@ class Bot(AsyncRegisterObject):
         AuthInfo.get_instance().me = response_json.get("data", {}).get("dodoSourceId")
 
         return self.__ws.run()
-
-
-if __name__ == '__main__':
-    bot = Bot("83199120", "ODMxOTkxMjA.77-9LAnvv70.4-jInox-uI8LTujPQZASLRGcxd_mn5twL-55m0LK7xc")
-    bot.run()

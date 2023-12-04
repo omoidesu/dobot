@@ -129,32 +129,3 @@ class Msg:
 
     async def remove_reaction(self, emoji: str):
         return await self.body.remove_reaction(emoji)
-
-
-if __name__ == "__main__":
-    event_body = {
-        "islandSourceId": "44659",
-        "channelId": "118506",
-        "dodoSourceId": "681856",
-        "messageId": "349552072708214784",
-        "personal": {
-            "nickName": "测试DoDo昵称",
-            "avatarUrl": "https://static.imdodo.com/DoDoRes/Avatar/6.png",
-            "sex": 1
-        },
-        "member": {
-            "nickName": "测试群昵称",
-            "joinTime": "2022-07-20 10:27:24"
-        },
-        "reference": {
-            "messageId": "",
-            "dodoSourceId": "",
-            "nickName": ""
-        },
-        "messageType": 1,
-        "messageBody": {
-            "content": "<@!3946846> .ping"
-        }
-    }
-    m = Msg(event_body)
-    print(m.mention)
