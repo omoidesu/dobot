@@ -160,3 +160,5 @@ cython_debug/
 #.idea/
 
 test.py
+MANIFEST.in
+setup.py
