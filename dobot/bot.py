@@ -1,13 +1,13 @@
 from typing import Union
 
-from dodo.cert import AuthInfo
-from dodo.client import Client
-from dodo.const import Route
-from dodo.eventMessage.msg import Msg
-from dodo.exception import ApiRequestError, RequestError
-from dodo.handler import EventHandler
-from dodo.interface.AsyncRegisterObject import AsyncRegisterObject
-from dodo.websocket import BotClient
+from dobot.cert import AuthInfo
+from dobot.client import Client
+from dobot.const import Route
+from dobot.eventMessage.msg import Msg
+from dobot.exception import ApiRequestError, RequestError
+from dobot.handler import EventHandler
+from dobot.interface.AsyncRegisterObject import AsyncRegisterObject
+from dobot.websocket import BotClient
 
 
 class Bot(AsyncRegisterObject):

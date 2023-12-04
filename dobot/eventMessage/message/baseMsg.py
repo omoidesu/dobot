@@ -1,11 +1,11 @@
 import emoji as emoji_lib
 
-from dodo.client import Client
-from dodo.eventMessage.message.component.member import Member
-from dodo.eventMessage.message.component.personal import Personal
-from dodo.eventMessage.message.context import Context
-from dodo.exception.argumentError import ArgumentError
-from dodo.functional import CachedProperty
+from dobot.client import Client
+from dobot.eventMessage.message.component.member import Member
+from dobot.eventMessage.message.component.personal import Personal
+from dobot.eventMessage.message.context import Context
+from dobot.exception.argumentError import ArgumentError
+from dobot.functional import CachedProperty
 
 
 class BaseMsg:

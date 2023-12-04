@@ -1,7 +1,7 @@
-from dodo.const import MessageType
-from dodo.eventMessage.message.baseMsg import BaseMsg
-from dodo.eventMessage.message.component.content import Content
-from dodo.eventMessage.message.context import Context
+from dobot.const import MessageType
+from dobot.eventMessage.message.baseMsg import BaseMsg
+from dobot.eventMessage.message.component.content import Content
+from dobot.eventMessage.message.context import Context
 
 
 class CardMsg(BaseMsg):

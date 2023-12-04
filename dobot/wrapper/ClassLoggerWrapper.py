@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from dodo import log
-from dodo.log import MyLogger
+from dobot import log
+from dobot.log import MyLogger
 
 logger = MyLogger()
 

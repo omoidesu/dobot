@@ -1,4 +1,4 @@
-from dodo.exception.argumentError import InitializationError
+from dobot.exception.argumentError import InitializationError
 
 
 class User:

@@ -1,22 +1,22 @@
 from typing import Union
 
-from dodo.cert import AuthInfo
-from dodo.const import MessageType
-from dodo.eventMessage.message.baseMsg import BaseMsg
-from dodo.eventMessage.message.cardMsg import CardMsg
-from dodo.eventMessage.message.component.channal import Channel
-from dodo.eventMessage.message.component.island import Island
-from dodo.eventMessage.message.component.member import Member
-from dodo.eventMessage.message.component.personal import Personal
-from dodo.eventMessage.message.component.reference import Reference
-from dodo.eventMessage.message.component.user import User
-from dodo.eventMessage.message.context import Context
-from dodo.eventMessage.message.fileMsg import FileMsg
-from dodo.eventMessage.message.imageMsg import ImageMsg
-from dodo.eventMessage.message.publicMsg import PublicMsg
-from dodo.eventMessage.message.redPacketMsg import RedPacketMsg
-from dodo.eventMessage.message.shareMsg import ShareMsg
-from dodo.eventMessage.message.videoMsg import VideoMsg
+from dobot.cert import AuthInfo
+from dobot.const import MessageType
+from dobot.eventMessage.message.baseMsg import BaseMsg
+from dobot.eventMessage.message.cardMsg import CardMsg
+from dobot.eventMessage.message.component.channal import Channel
+from dobot.eventMessage.message.component.island import Island
+from dobot.eventMessage.message.component.member import Member
+from dobot.eventMessage.message.component.personal import Personal
+from dobot.eventMessage.message.component.reference import Reference
+from dobot.eventMessage.message.component.user import User
+from dobot.eventMessage.message.context import Context
+from dobot.eventMessage.message.fileMsg import FileMsg
+from dobot.eventMessage.message.imageMsg import ImageMsg
+from dobot.eventMessage.message.publicMsg import PublicMsg
+from dobot.eventMessage.message.redPacketMsg import RedPacketMsg
+from dobot.eventMessage.message.shareMsg import ShareMsg
+from dobot.eventMessage.message.videoMsg import VideoMsg
 
 
 class Msg:
