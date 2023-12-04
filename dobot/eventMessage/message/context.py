@@ -1,6 +1,6 @@
-from dodo.eventMessage.message.component.channal import Channel
-from dodo.eventMessage.message.component.island import Island
-from dodo.eventMessage.message.component.user import User
+from dobot.eventMessage.message.component.channal import Channel
+from dobot.eventMessage.message.component.island import Island
+from dobot.eventMessage.message.component.user import User
 
 
 class Context:

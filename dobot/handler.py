@@ -1,10 +1,10 @@
 import asyncio
 from typing import Callable, Union
 
-from dodo.cert import AuthInfo
-from dodo.const import EventType, MessageType
-from dodo.eventMessage.msg import Msg
-from dodo.log import MyLogger
+from dobot.cert import AuthInfo
+from dobot.const import EventType, MessageType
+from dobot.eventMessage.msg import Msg
+from dobot.log import MyLogger
 
 logger = MyLogger()
 

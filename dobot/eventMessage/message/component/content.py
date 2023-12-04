@@ -1,6 +1,6 @@
 import re
 
-from dodo.const import MENTION_PATTERN
+from dobot.const import MENTION_PATTERN
 
 
 class Content(str):

@@ -1,6 +1,6 @@
-from dodo.const import MessageType
-from dodo.eventMessage.message.baseMsg import BaseMsg
-from dodo.eventMessage.message.context import Context
+from dobot.const import MessageType
+from dobot.eventMessage.message.baseMsg import BaseMsg
+from dobot.eventMessage.message.context import Context
 
 
 class ImageMsg(BaseMsg):

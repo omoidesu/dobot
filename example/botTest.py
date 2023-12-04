@@ -1,7 +1,7 @@
 import json
 
-from dodo import Bot
-from dodo.eventMessage.msg import Msg
+from dobot import Bot
+from dobot.eventMessage.msg import Msg
 
 with open("bot.json", "r", encoding="utf-8") as f:
     bot_info = json.load(f)

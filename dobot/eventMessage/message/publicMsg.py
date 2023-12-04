@@ -1,13 +1,13 @@
 from typing import Union
 
-from dodo.client import Client
-from dodo.const import MessageType
-from dodo.eventMessage.message.baseMsg import BaseMsg
-from dodo.eventMessage.message.component.content import Content
-from dodo.eventMessage.message.component.member import Member
-from dodo.eventMessage.message.component.personal import Personal
-from dodo.eventMessage.message.context import Context
-from dodo.functional import CachedProperty
+from dobot.client import Client
+from dobot.const import MessageType
+from dobot.eventMessage.message.baseMsg import BaseMsg
+from dobot.eventMessage.message.component.content import Content
+from dobot.eventMessage.message.component.member import Member
+from dobot.eventMessage.message.component.personal import Personal
+from dobot.eventMessage.message.context import Context
+from dobot.functional import CachedProperty
 
 
 class PublicMsg(BaseMsg):
