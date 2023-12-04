@@ -20,10 +20,14 @@ async def ping(msg: Msg):
     # 回复消息
     reply_message: Msg = await msg.reply("pong!")
     # 给回复的消息添加回应
+    # time.sleep(2)
+    # await reply_message.edit("我现在不是pong了")
+    # time.sleep(2)
+    # await reply_message.delete("我撤回了略略略")
     time.sleep(2)
-    await reply_message.edit("我现在不是pong了")
+    await reply_message.top()
     time.sleep(2)
-    await reply_message.delete("我撤回了略略略")
+    await reply_message.cancel_top()
 
 
 # bot的运行方法

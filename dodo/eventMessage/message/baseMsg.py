@@ -67,6 +67,18 @@ class BaseMsg:
         """
         raise ArgumentError("Invalid method! Only msg event has delete method")
 
+    async def top(self):
+        """
+        置顶消息
+        """
+        raise ArgumentError("Invalid method! Only msg event has top method")
+
+    async def cancel_top(self):
+        """
+        取消置顶
+        """
+        raise ArgumentError("Invalid method! Only msg event has cancel_top method")
+
     async def add_reaction(self, emoji: str):
         """
         添加表情反应

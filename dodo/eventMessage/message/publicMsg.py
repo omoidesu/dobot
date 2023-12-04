@@ -87,6 +87,20 @@ class PublicMsg(BaseMsg):
 
         return await self._client.delete_public_message(**kwargs)
 
+    async def top(self):
+        kwargs = {
+            'messageId': self._message_id,
+        }
+
+        return await self._client.top_public_message(**kwargs)
+
+    async def cancel_top(self):
+        kwargs = {
+            'messageId': self._message_id,
+        }
+
+        return await self._client.cancel_top_public_message(**kwargs)
+
     async def add_reaction(self, emoji: str):
         if len(emoji) != 1:
             target_emoji = emoji_lib.emojize(emoji, language='alias')

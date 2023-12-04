@@ -118,6 +118,12 @@ class Msg:
     async def delete(self, reason: str, message_id: str = None):
         return await self.body.delete(reason, message_id)
 
+    async def top(self):
+        return await self.body.top()
+
+    async def cancel_top(self):
+        return await self.body.cancel_top()
+
     async def add_reaction(self, emoji: str):
         return await self.body.add_reaction(emoji)
 
