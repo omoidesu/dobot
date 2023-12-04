@@ -1,4 +1,4 @@
-from typing import Union
+import emoji as emoji_lib
 
 from dodo.client import Client
 from dodo.eventMessage.message.component.member import Member
@@ -18,6 +18,16 @@ class BaseMsg:
     _member: Member
     _ctx: Context
     _client: Client
+
+    @staticmethod
+    def _parse_emoji(emoji: str):
+        if len(emoji) != 1:
+            target_emoji = emoji_lib.emojize(emoji, language='alias')
+            if target_emoji == emoji:
+                raise ArgumentError("emoji must be a single emoji or a shortcode")
+        else:
+            target_emoji = emoji
+        return target_emoji
 
     @property
     def ctx(self):
@@ -84,3 +94,9 @@ class BaseMsg:
         添加表情反应
         """
         raise ArgumentError("Invalid method! Only msg event has add_reaction method")
+
+    async def remove_reaction(self, emoji: str):
+        """
+        取消表情反应
+        """
+        raise ArgumentError("Invalid method! Only msg event has remove_reaction method")

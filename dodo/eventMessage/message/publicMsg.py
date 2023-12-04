@@ -102,12 +102,7 @@ class PublicMsg(BaseMsg):
         return await self._client.cancel_top_public_message(**kwargs)
 
     async def add_reaction(self, emoji: str):
-        if len(emoji) != 1:
-            target_emoji = emoji_lib.emojize(emoji, language='alias')
-            if target_emoji == emoji:
-                raise ArgumentError("emoji must be a single emoji or a shortcode")
-        else:
-            target_emoji = emoji
+        target_emoji = self._parse_emoji(emoji)
 
         kwargs = {
             'messageId': self._message_id,
@@ -115,3 +110,13 @@ class PublicMsg(BaseMsg):
         }
 
         return await self._client.add_public_message_reaction(**kwargs)
+
+    async def remove_reaction(self, emoji: str):
+        target_emoji = self._parse_emoji(emoji)
+
+        kwargs = {
+            'messageId': self._message_id,
+            'emoji': {'type': 1, 'id': str(ord(target_emoji))}
+        }
+
+        return await self._client.remove_public_message_reaction(**kwargs)

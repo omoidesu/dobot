@@ -127,6 +127,9 @@ class Msg:
     async def add_reaction(self, emoji: str):
         return await self.body.add_reaction(emoji)
 
+    async def remove_reaction(self, emoji: str):
+        return await self.body.remove_reaction(emoji)
+
 
 if __name__ == "__main__":
     event_body = {
