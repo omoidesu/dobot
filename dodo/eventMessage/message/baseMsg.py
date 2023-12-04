@@ -54,3 +54,21 @@ class BaseMsg:
         回复消息
         """
         raise ArgumentError("Invalid method! Only msg event has reply method")
+
+    async def edit(self, content):
+        """
+        编辑消息
+        """
+        raise ArgumentError("Invalid method! Only msg event has edit method")
+
+    async def delete(self, reason, message_id: str = None):
+        """
+        撤回消息
+        """
+        raise ArgumentError("Invalid method! Only msg event has delete method")
+
+    async def add_reaction(self, emoji: str):
+        """
+        添加表情反应
+        """
+        raise ArgumentError("Invalid method! Only msg event has add_reaction method")

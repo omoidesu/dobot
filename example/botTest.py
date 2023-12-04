@@ -1,4 +1,5 @@
 import json
+import time
 
 from dodo import Bot
 from dodo.eventMessage.msg import Msg
@@ -20,7 +21,10 @@ async def ping(msg: Msg):
     # 回复消息
     reply_message: Msg = await msg.reply("pong!")
     # 给回复的消息添加回应
-    # await reply_message.add_reaction("👍")
+    time.sleep(2)
+    await reply_message.edit("我现在不是pong了")
+    time.sleep(2)
+    await reply_message.delete("我撤回了略略略")
 
 
 # bot的运行方法

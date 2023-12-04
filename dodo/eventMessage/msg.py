@@ -97,8 +97,6 @@ class Msg:
 
     async def reply(self, content: Union[str, BaseMsg]):
         res: dict = await self.body.reply(content)
-        if res.get('status', -1) != SUCCESS:
-            raise ValueError(f"Reply Failed! {res.get('message', '')}")
         _event_body = res.get('data', {})
         _event_body['messageType'] = MessageType.TEXT.value if isinstance(content, str) else content._MESSAGE_TYPE
         _event_body['channelId'] = self.ctx.channel.id
@@ -106,6 +104,22 @@ class Msg:
         _event_body['dodoSourceId'] = AuthInfo.get_instance().me
 
         return Msg(_event_body)
+
+    async def edit(self, content: Union[str, BaseMsg]):
+        res: dict = await self.body.edit(content)
+        _event_body = res.get('data', {})
+        _event_body['messageType'] = MessageType.TEXT.value if isinstance(content, str) else content._MESSAGE_TYPE
+        _event_body['channelId'] = self.ctx.channel.id
+        _event_body['islandSourceId'] = self.ctx.island.id
+        _event_body['dodoSourceId'] = AuthInfo.get_instance().me
+
+        return Msg(_event_body)
+
+    async def delete(self, reason: str, message_id: str = None):
+        return await self.body.delete(reason, message_id)
+
+    async def add_reaction(self, emoji: str):
+        return await self.body.add_reaction(emoji)
 
 
 if __name__ == "__main__":

@@ -23,4 +23,4 @@ class ApiRequestError(RequestError):
         self._message = message
 
     def __str__(self):
-        return f"Requesting '{self._route}' failed with {self._status}: {self._message}"
+        return f"Requesting '{self._route}' failed with {self._status}: {self._message} params: {self._params}"

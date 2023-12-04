@@ -59,7 +59,7 @@ class HttpRequester(LogAbstractObject):
                 data = await response.json()
                 status = data.get("status", -9999)
                 if status != 0:
-                    raise ApiRequestError(response.status, route, kwargs, status, data.get("messagebak", ""))
+                    raise ApiRequestError(response.status, route, kwargs, status, data.get("message", ""))
 
             return data
 

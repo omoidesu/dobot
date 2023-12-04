@@ -25,9 +25,6 @@ class Client:
         return await self.request(Route.SET_CHANNEL_MESSAGE_SEND, **kwargs)
 
     async def edit_public_message(self, **kwargs):
-        if kwargs.get('messageType', -1) not in self.__allow_message_type__:
-            raise MessageTypeError(self.__allow_message_type__)
-
         return await self.request(Route.SET_CHANNEL_MESSAGE_EDIT, **kwargs)
 
     async def delete_public_message(self, **kwargs):
