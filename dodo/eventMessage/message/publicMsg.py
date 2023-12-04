@@ -1,7 +1,5 @@
 from typing import Union
 
-import emoji as emoji_lib
-
 from dodo.client import Client
 from dodo.const import MessageType
 from dodo.eventMessage.message.baseMsg import BaseMsg
@@ -9,7 +7,6 @@ from dodo.eventMessage.message.component.content import Content
 from dodo.eventMessage.message.component.member import Member
 from dodo.eventMessage.message.component.personal import Personal
 from dodo.eventMessage.message.context import Context
-from dodo.exception.argumentError import ArgumentError
 from dodo.functional import CachedProperty
 
 

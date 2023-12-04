@@ -1,12 +1,14 @@
 from typing import Union
 
 from dodo.cert import AuthInfo
-from dodo.const import SUCCESS, MessageType
+from dodo.const import MessageType
+from dodo.eventMessage.message.baseMsg import BaseMsg
+from dodo.eventMessage.message.cardMsg import CardMsg
 from dodo.eventMessage.message.component.channal import Channel
 from dodo.eventMessage.message.component.island import Island
 from dodo.eventMessage.message.component.member import Member
-from dodo.eventMessage.message.baseMsg import BaseMsg
-from dodo.eventMessage.message.cardMsg import CardMsg
+from dodo.eventMessage.message.component.personal import Personal
+from dodo.eventMessage.message.component.reference import Reference
 from dodo.eventMessage.message.component.user import User
 from dodo.eventMessage.message.context import Context
 from dodo.eventMessage.message.fileMsg import FileMsg
@@ -15,8 +17,6 @@ from dodo.eventMessage.message.publicMsg import PublicMsg
 from dodo.eventMessage.message.redPacketMsg import RedPacketMsg
 from dodo.eventMessage.message.shareMsg import ShareMsg
 from dodo.eventMessage.message.videoMsg import VideoMsg
-from dodo.eventMessage.message.component.personal import Personal
-from dodo.eventMessage.message.component.reference import Reference
 
 
 class Msg:
