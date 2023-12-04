@@ -3,9 +3,24 @@
 一个专用于 [Dodo](https://www.imdodo.com/) 的Python SDK  
 [Dodo开发者文档](https://open.imdodo.com/)
 
+# 如何使用
+
+```python
+# ======停用=======
+# pip install dobot
+# ======停用=======
+
+# 由于PyPi服务器的问题现在暂时无法上传至PyPi，所以请使用以下方法使用
+
+"""
+下载源码解析，放入项目后参照下方示例使用
+"""
+```
+
 # 简单示例
 
 ```json
+// bot.json 文件
 {
   "client_id": "xxxx",
   "token": "xxxxx"
@@ -15,12 +30,16 @@
 ```python
 import json
 
+# bot主类
 from dobot import Bot
+# 服务器返回消息解析后的Msg类，内含消息类型API的封装方法
 from dobot.eventMessage.msg import Msg
 
+# 读取bot配置信息
 with open("bot.json", "r", encoding="utf-8") as f:
   bot_info = json.load(f)
 
+# 在同此文件路径下配置bot.json或初始化填入botId及token  
 # 初始化bot
 bot = Bot(bot_info.get("client_id"), bot_info.get("token"))
 
