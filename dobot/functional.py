@@ -35,3 +35,32 @@ class CachedProperty:
             return self
         res = instance.__dict__[self.name] = self.func(instance)
         return res
+
+
+class CachedClass:
+    """
+    这是一个单例管理装饰器，作用是把被装饰的类变成单例模式
+    通过_label参数来区分不同的实例，只有参数中存在_label参数时才会启用单例模式
+    注意：这个装饰器只能用在类上，不能用在方法上，且被装饰的类__init__方法中不能有_label参数，否则会被装饰器捕获生成唯一实例
+    """
+
+    _instance_dict: dict
+    _real_cls: callable
+
+    def __init__(self, cls):
+        if type(cls) != type:
+            raise TypeError("CachedClass can only decorate class.")
+        self._instance_dict = {}
+        self._real_cls = cls
+        self.__doc__ = getattr(cls, '__doc__')
+
+    def __call__(self, *args, **kwargs):
+        _label = kwargs.get("_label", None)
+        if _label is None:
+            return self._real_cls(*args, **kwargs)
+        if _label not in self._instance_dict:
+            _instance = self._real_cls(_label)
+            self._instance_dict[_label] = _instance
+            return _instance
+        else:
+            return self._instance_dict[_label]
