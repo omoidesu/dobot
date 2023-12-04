@@ -1,4 +1,4 @@
-# dodo-sdk
+# dobot
 
 一个专用于 [Dodo](https://www.imdodo.com/) 的Python SDK  
 [Dodo开发者文档](https://open.imdodo.com/)
