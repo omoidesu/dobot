@@ -72,7 +72,7 @@ class CachedClass:
     _real_cls: callable
 
     def __init__(self, cls):
-        if type(cls) != type:
+        if not isinstance(cls, type):
             raise TypeError("CachedClass can only decorate class.")
         self._instance_dict = {}
         self._real_cls = cls
@@ -95,3 +95,22 @@ class CachedClass:
             return _instance
         else:
             return self._instance_dict[_label]
+
+
+class SingleClass:
+    """
+    单例装饰器，被装饰的类会变成单例的
+    """
+    _instance: type
+    _real_cls: callable
+
+    def __init__(self, cls):
+        if not isinstance(cls, type):
+            raise TypeError("CachedClass can only decorate class.")
+        self._real_cls = cls
+        self.__doc__ = getattr(cls, '__doc__')
+
+    def __call__(self, *args, **kwargs):
+        if self._instance is None:
+            self._instance = self._real_cls(*args, **kwargs)
+        return self._instance

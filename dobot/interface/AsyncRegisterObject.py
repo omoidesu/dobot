@@ -3,7 +3,7 @@ import asyncio
 
 
 class AsyncRegisterObject(ABC):
-    _loop: asyncio.AbstractEventLoop = None
+    _loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
 
     @property
     def loop(self) -> asyncio.AbstractEventLoop:

@@ -1,6 +1,9 @@
 from typing import BinaryIO, Union
 
+from dobot.functional import SingleClass
 
+
+@SingleClass
 class F:
     """
     文件工厂，用于处理各种类型的文件
