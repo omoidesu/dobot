@@ -84,3 +84,13 @@ class File:
                 __remove_item.append(item)
         for __item in __remove_item:
             self._image.pop(__item)
+
+    def get_image(self, img_with_path):
+        return self._image[img_with_path]
+
+    def get_image_by_path(self, path):
+        __image_list = []
+        for item in self._image:
+            if item.startswith(self.__path_parser(path)):
+                __image_list.append(self._image[item])
+        return __image_list
