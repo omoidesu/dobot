@@ -11,7 +11,6 @@ class WindowsFileMonitor(BaseFileMonitor):
         super().__init__()
 
     def __set_name__(self, owner, name):
-        print(name)
         if self._name is None:
             self._name = name
         elif name != self._name:
