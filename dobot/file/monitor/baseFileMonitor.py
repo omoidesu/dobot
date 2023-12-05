@@ -49,19 +49,19 @@ class BaseFileMonitor(AsyncRegisterObject):
         }
         return action_mapping.get(action, 'unknown')
 
-    def on_file_change(self, file_name, action):
+    def on_file_change(self, abs_path, action):
         """
         文件操作的回调函数
         """
         # TODO 现在只保存了图片类型的文件，后续需要添加其他类型的文件
-        logger.debug(f"File {file_name} has been {self._map_action(action)}")
-        if any(file_name.lower().endswith(ext) for ext in PICTURE_SUFFIX):
+        logger.debug(f"File {abs_path} has been {self._map_action(action)}")
+        if any(abs_path.lower().endswith(ext) for ext in PICTURE_SUFFIX):
             if action == FILE_CREATED:
-                self._file.add_image(file_name)
+                self._file.add_image(abs_path)
             elif action == FILE_DELETED:
-                self._file.remove_image(file_name)
+                self._file.remove_image(abs_path)
             else:
-                self._file.reset_image(file_name)
+                self._file.reset_image(abs_path)
 
     async def async_directory_monitoring(self, directory_path):
         """
