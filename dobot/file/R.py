@@ -1,5 +1,6 @@
 import os.path
 import sys
+from typing import Union
 
 from dobot.const import WINDOWS, LINUX
 from dobot.exception.argumentError import SystemKernelError
@@ -27,9 +28,25 @@ class R:
 
     @staticmethod
     def __absolute_path(func):
-        def wrapper(self, path: str):
-            _abs_path = os.path.abspath(path)
+        def wrapper(self, path: Union[str, Image]):
+            if isinstance(path, str):
+                _abs_path = os.path.abspath(path)
+                _abs_path = _abs_path.replace('\\', '/')
+            else:
+                _abs_path = path
             return func(self, _abs_path)
+
+        return wrapper
+
+    @staticmethod
+    def __async_absolute_path(func):
+        async def wrapper(self, path: Union[str, Image]):
+            if isinstance(path, str):
+                _abs_path = os.path.abspath(path)
+                _abs_path = _abs_path.replace('\\', '/')
+            else:
+                _abs_path = path
+            return await func(self, _abs_path)
 
         return wrapper
 
@@ -39,7 +56,7 @@ class R:
     def __init__(self):
         self._file = File()
 
-    @__absolute_path
+    @__async_absolute_path
     async def add_path(self, path):
         """
         添加监控的路径，从一添加进来的瞬间这里就开始监控了
@@ -47,12 +64,28 @@ class R:
         await self._monitor.add_path(path)
         return self
 
-    @__absolute_path
+    @__async_absolute_path
     async def remove_path(self, path):
         """
         移除监控的路径
         """
         await self._monitor.remove_path(path)
+        return self
+
+    @__absolute_path
+    def add_image(self, file):
+        """
+        将文件添加进R的管理中
+        """
+        self._file.add_image(file)
+        return self
+
+    @__absolute_path
+    def remove_image(self, file):
+        """
+        将文件添移除R的管理
+        """
+        self._file.remove_image(file)
         return self
 
     @__absolute_path

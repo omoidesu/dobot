@@ -1,4 +1,5 @@
 import copy
+import os.path
 from typing import Union
 
 
@@ -79,14 +80,20 @@ class CachedClass:
         self._real_cls = cls
         self.__doc__ = getattr(cls, '__doc__')
 
+    def __instancecheck__(self, other):
+        return isinstance(other, self._real_cls)
+
     def __call__(self, *args, **kwargs):
         _label = kwargs.pop("_label", None)
+        if _label is None:
+            _label = kwargs.pop("_path_label", None)
+            if _label is not None:
+                _label = os.path.abspath(_label).replace("\\", '/')
         _args_label_flag = kwargs.pop("_args_label_flag", False)
         if _args_label_flag:
             label_kwargs = copy.deepcopy(kwargs)
             label_kwargs["args"]: tuple = args
             label_kwargs = dict(sorted(label_kwargs.items(), key=lambda x: x[0]))
-            # label_kwargs = set(label_kwargs)
             _label = str(label_kwargs)
         if _label is None:
             return self._real_cls(*args, **kwargs)
@@ -116,3 +123,6 @@ class SingleClass:
         if self._instance is None:
             self._instance = self._real_cls(*args, **kwargs)
         return self._instance
+
+    def __instancecheck__(self, other):
+        return isinstance(other, self.cls)

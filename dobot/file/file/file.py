@@ -23,7 +23,7 @@ class File:
 
     @staticmethod
     def __path_parser(path) -> str:
-        return path.replace('\\', '.').replace('/', '.')
+        return path.replace('\\', '/')
 
     async def __images_list(self, folder_path, base_path=None):
         """
@@ -46,14 +46,15 @@ class File:
         async for image_path in self.__images_list(folder_path):
             _image_path = self.__path_parser(str(image_path))
             # TODO Dodo暂时仅支持图片
-            self._image[_image_path] = Image(_image_path, _label=_image_path)
+            self._image[_image_path] = Image(_image_path, _path_label=_image_path)
 
-    def add_image(self, image_path):
+    def add_image(self, image_path) -> Image:
         """
         添加文件
         """
         if image_path not in self._image:
-            self._image[self.__path_parser(image_path)] = Image(image_path, _label=image_path)
+            self._image[self.__path_parser(image_path)] = Image(image_path, _path_label=image_path)
+        return self._image[self.__path_parser(image_path)]
 
     def remove_image(self, image_path):
         """
@@ -65,7 +66,7 @@ class File:
         """
         添加文件
         """
-        self._image[self.__path_parser(image_path)] = Image(image_path, _label=image_path)
+        self._image[self.__path_parser(image_path)] = Image(image_path, _path_label=image_path)
 
     async def add_path(self, path):
         """
@@ -86,9 +87,15 @@ class File:
             self._image.pop(__item)
 
     def get_image(self, img_with_path):
+        """
+        通过文件路径获取被R管理的文件对象
+        """
         return self._image[img_with_path]
 
     def get_image_by_path(self, path):
+        """
+        通过文件夹路径获取被R管理的文件对象的list
+        """
         __image_list = []
         for item in self._image:
             if item.startswith(self.__path_parser(path)):
