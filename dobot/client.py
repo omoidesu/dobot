@@ -43,3 +43,7 @@ class Client:
 
     async def remove_public_message_reaction(self, **kwargs):
         return await self.request(Route.SET_CHANNEL_MESSAGE_REACTION_REMOVE, **kwargs)
+
+    async def upload_image(self, **kwargs):
+        kwargs["_type"] = "form-data"
+        return await self.request(Route.SET_RESOURCE_PICTURE_UPLOAD, **kwargs)

@@ -7,6 +7,7 @@ class WindowsFileMonitor(BaseFileMonitor):
     """
     windows特化的类，用于区分可能存在的部分差异
     """
+
     def __init__(self):
         super().__init__()
 
@@ -18,6 +19,7 @@ class WindowsFileMonitor(BaseFileMonitor):
                 "Cannot assign the same property to two different names "
                 "(%r and %r)." % (self._name, name)
             )
+
 
 if __name__ == "__main__":
     class MyClass:

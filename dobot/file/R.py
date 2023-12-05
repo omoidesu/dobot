@@ -15,6 +15,7 @@ def _get_platform():
     else:
         raise SystemKernelError("SystemKernelError! dobot only support Windows and Linux now")
 
+
 @SingleClass
 class R:
     """
