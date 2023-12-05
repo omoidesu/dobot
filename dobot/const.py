@@ -2,6 +2,18 @@ from enum import Enum
 
 SUCCESS = 0
 
+# 系统内核
+WINDOWS = 0
+LINUX = 1
+
+PICTURE_SUFFIX = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']
+
+FILE_CREATED = 1
+FILE_MODIFIED = 2
+FILE_DELETED = 3
+FILE_RENAMED = 4
+FILE_UNKNOWN = 32768
+
 # 返回码
 RESPONSE_STATUS_CODE = {
     0: '成功',

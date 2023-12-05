@@ -6,7 +6,7 @@ from dobot.functional import SingleClass
 @SingleClass
 class F:
     """
-    文件工厂，用于处理各种类型的文件
+    文件工厂，用于存放所有监控的文件，并且提供对应的处理方法
     """
 
     _file_name: str

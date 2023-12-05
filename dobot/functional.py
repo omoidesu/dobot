@@ -1,4 +1,5 @@
 import copy
+from typing import Union
 
 
 class CachedProperty:
@@ -101,12 +102,13 @@ class SingleClass:
     """
     单例装饰器，被装饰的类会变成单例的
     """
-    _instance: type
+    _instance: Union[type, None]
     _real_cls: callable
 
     def __init__(self, cls):
         if not isinstance(cls, type):
             raise TypeError("CachedClass can only decorate class.")
+        self._instance = None
         self._real_cls = cls
         self.__doc__ = getattr(cls, '__doc__')
 

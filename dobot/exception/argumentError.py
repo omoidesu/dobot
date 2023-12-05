@@ -10,3 +10,7 @@ class ArgumentError(Exception):
 
 class InitializationError(ArgumentError):
     ...
+
+
+class SystemKernelError(ArgumentError):
+    ...

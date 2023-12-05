@@ -22,7 +22,7 @@ VERSION = '0.0.1'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'aiohttp', 'requests', 'websockets', 'emoji'
+    'aiohttp', 'requests', 'websockets', 'emoji', 'watchgod'
 ]
 
 # What packages are optional?
