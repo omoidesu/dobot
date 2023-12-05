@@ -10,6 +10,7 @@ from dobot.log import MyLogger
 
 logger = MyLogger()
 
+
 class BaseFileMonitor(AsyncRegisterObject):
     """
     监控windows内部文件的类

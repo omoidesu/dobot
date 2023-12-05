@@ -1,4 +1,3 @@
-import asyncio
 from pathlib import Path
 
 from dobot.const import PICTURE_SUFFIX
@@ -55,6 +54,7 @@ class File:
         """
         if image_path not in self._image:
             self._image[self.__path_parser(image_path)] = Image(image_path, _label=image_path)
+
     def remove_image(self, image_path):
         """
         删除文件

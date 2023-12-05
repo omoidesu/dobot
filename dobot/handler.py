@@ -41,6 +41,7 @@ class HandlerMap:
     def event(self, event: dict):
         self._event = event
 
+
 class DispatchMethod:
     _func: Callable
     _at_flag: bool
@@ -155,10 +156,10 @@ class EventHandler:
         self._handler_map.msg = _msg_command_dict
 
     def register_reaction_event(self,
-                           island_id_list: set,
-                           channel_id_list: set,
-                           emoji_list: set,
-                           reaction_type: int):
+                                island_id_list: set,
+                                channel_id_list: set,
+                                emoji_list: set,
+                                reaction_type: int):
         """
         消息事件的装饰器方法，用于处理表情反应类的业务
         :param island_id_list: 群ID列表

@@ -1,12 +1,10 @@
 import asyncio
 import json
 
-import aiohttp
-from aiohttp import ClientSession, FormData
+from aiohttp import ClientSession
 from urllib3 import encode_multipart_formdata
 
 from .cert import AuthInfo
-from .const import Route
 from .exception import ApiRequestError, RequestError
 from .interface.LogAbstractObject import LogAbstractObject
 from .log import MyLogger

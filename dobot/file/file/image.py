@@ -1,8 +1,5 @@
-import asyncio
-
 import aiofiles
 
-from dobot.cert import AuthInfo
 from dobot.client import Client
 from dobot.file.file.baseFile import BaseFile
 from dobot.functional import CachedClass
