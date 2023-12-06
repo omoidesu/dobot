@@ -4,6 +4,7 @@ import json
 from dobot import Bot
 # 服务器返回消息解析后的Msg类，内含消息类型API的封装方法
 from dobot import Msg
+from dobot.const import EventType
 
 # 读取bot配置信息
 with open("bot.json", "r", encoding="utf-8") as f:
@@ -34,6 +35,11 @@ async def ping(msg: Msg):
   await reply_message.cancel_top()
   # 撤回消息
   await reply_message.delete("我撤回了略略略")
+
+
+@bot.on_event(event_type=EventType.EMOJI_REACTION)
+async def on_ready(msg: Msg):
+  await msg.send("谁让你给我表情反应了", at_sender=True)
 
 
 # bot的运行方法

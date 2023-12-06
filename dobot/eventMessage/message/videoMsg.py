@@ -8,6 +8,7 @@ class VideoMsg(BaseMsg):
     _ctx: Context
 
     def __init__(self, message_body: dict):
+        super().__init__()
         self._url = message_body.get('url', '')
         self._cover_url = message_body.get('coverUrl', '')
         self._duration = message_body.get('duration', 0)

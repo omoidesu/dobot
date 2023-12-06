@@ -8,6 +8,7 @@ class FileMsg(BaseMsg):
     _ctx: Context
 
     def __init__(self, message_body: dict):
+        super().__init__()
         self._url = message_body.get('url', '')
         self._name = message_body.get('name', '')
         self._size = message_body.get('size', 0)

@@ -8,6 +8,7 @@ class RedPacketMsg(BaseMsg):
     _ctx: Context
 
     def __init__(self, message_body: dict):
+        super().__init__()
         self._type = message_body.get('type', 0)
         self._count = message_body.get('count', 0)
         self._total_amount = message_body.get('totalAmount', 0)

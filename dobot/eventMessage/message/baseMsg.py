@@ -1,102 +1,32 @@
-import emoji as emoji_lib
+from typing import Union
 
 from dobot.client import Client
-from dobot.eventMessage.message.component.member import Member
-from dobot.eventMessage.message.component.personal import Personal
+from dobot.const import MessageType
 from dobot.eventMessage.message.context import Context
-from dobot.exception.argumentError import ArgumentError
-from dobot.functional import CachedProperty
+from dobot.interface.BaseMsgInterface import BaseMsgInterface
 
 
-class BaseMsg:
-    _MESSAGE_TYPE: int
-    _island_source_id: str
-    _channel_id: str
-    _dodo_source_id: str
-    _message_id: str
-    _personal: Personal
-    _member: Member
+class BaseMsg(BaseMsgInterface):
     _ctx: Context
     _client: Client
 
-    @staticmethod
-    def _parse_emoji(emoji: str):
-        if len(emoji) != 1:
-            target_emoji = emoji_lib.emojize(emoji, language='alias')
-            if target_emoji == emoji:
-                raise ArgumentError("emoji must be a single emoji or a shortcode")
+    def __init__(self):
+        self._client = Client()
+
+    async def send(self, content: Union[str, BaseMsgInterface]) -> dict:
+        if isinstance(content, str):
+            _message_type = MessageType.TEXT.value
+            _message_body = {
+                "content": content
+            }
         else:
-            target_emoji = emoji
-        return target_emoji
+            _message_type = content._MESSAGE_TYPE
+            _message_body = content.dict()
 
-    @property
-    def ctx(self):
-        return self._ctx
+        kwargs = {
+            'channelId': self.ctx.channel.id,
+            'messageType': _message_type,
+            'messageBody': _message_body
+        }
 
-    @ctx.setter
-    def ctx(self, ctx: Context):
-        self._ctx = ctx
-
-    @property
-    def message_id(self):
-        return self._message_id
-
-    @message_id.setter
-    def message_id(self, message_id: str):
-        self._message_id = message_id
-
-    @CachedProperty
-    def mention(self):
-        """
-        获取消息的@信息
-        """
-        raise ArgumentError("Invalid Argument! Only PublicMsg has mention argument")
-
-    @CachedProperty
-    def pre_mention(self):
-        """
-        获取消息prefix之前的@信息
-        """
-        raise ArgumentError("Invalid Argument! Only PublicMsg has mention argument")
-
-    async def reply(self, content):
-        """
-        回复消息
-        """
-        raise ArgumentError("Invalid method! Only msg event has reply method")
-
-    async def edit(self, content):
-        """
-        编辑消息
-        """
-        raise ArgumentError("Invalid method! Only msg event has edit method")
-
-    async def delete(self, reason, message_id: str = None):
-        """
-        撤回消息
-        """
-        raise ArgumentError("Invalid method! Only msg event has delete method")
-
-    async def top(self):
-        """
-        置顶消息
-        """
-        raise ArgumentError("Invalid method! Only msg event has top method")
-
-    async def cancel_top(self):
-        """
-        取消置顶
-        """
-        raise ArgumentError("Invalid method! Only msg event has cancel_top method")
-
-    async def add_reaction(self, emoji: str):
-        """
-        添加表情反应
-        """
-        raise ArgumentError("Invalid method! Only msg event has add_reaction method")
-
-    async def remove_reaction(self, emoji: str):
-        """
-        取消表情反应
-        """
-        raise ArgumentError("Invalid method! Only msg event has remove_reaction method")
+        return await self._client.send_public_message(**kwargs)

@@ -1,4 +1,5 @@
 import asyncio
+import warnings
 from typing import Callable, Union
 
 from dobot.cert import AuthInfo
@@ -40,6 +41,14 @@ class HandlerMap:
     @event.setter
     def event(self, event: dict):
         self._event = event
+
+    @property
+    def reaction(self):
+        return self._reaction
+
+    @reaction.setter
+    def reaction(self, reaction: dict):
+        self._reaction = reaction
 
 
 class DispatchMethod:
@@ -89,14 +98,14 @@ class EventHandler:
         _data = msg_dict.get("data", {})
         _event_body = _data.get("eventBody", None)
         _event_type = _data.get("eventType", None)
+        _msg = Msg(_event_body)
         if _event_type == EventType.CHANNEL_MESSAGE.value:
-            _msg = Msg(_event_body)
-            # 只有文字类型的才会进cmd_msg，其他待定
+            # TODO 只有文字类型的才会进cmd_msg，其他待定
             if _msg.message_type == MessageType.TEXT.value:
                 self._handle_cmd_msg(_msg)
         # elif _event_type == EventType.EMOJI_REACTION.value:
         else:
-            pass
+            self._handle_event_msg(_msg, _event_type)
 
     def _handle_cmd_msg(self, msg: Msg):
         """
@@ -106,17 +115,21 @@ class EventHandler:
         """
         try:
             awaitable_func = self._filter_msg_cmd(msg)
-            return asyncio.gather(awaitable_func(msg))
+            asyncio.gather(awaitable_func(msg))
         except Exception as e:
             logger.debug(e)
 
-    def _handle_event_msg(self, msg: Msg):
+    def _handle_event_msg(self, msg: Msg, event_type: Union[str, EventType]):
         """
         处理非消息事件的方法
         :param msg: ws返回的msg实体信息
         :return: 被调度方法
         """
-        return self._handler_map.event.get()
+        if isinstance(event_type, EventType):
+            event_type = event_type.value
+        awaitable_func = self._handler_map.event.get(event_type, None)
+        if awaitable_func is not None:
+            asyncio.gather(awaitable_func(msg))
 
     def _filter_msg_cmd(self, msg: Msg) -> asyncio.coroutine:
         """
@@ -155,6 +168,18 @@ class EventHandler:
             _msg_command_dict[item + cmd] = DispatchMethod(func, at_bot)
         self._handler_map.msg = _msg_command_dict
 
+    def register_event(self, event_type: Union[str, EventType], func: Callable):
+        """
+        将被装饰的事件方法放入调度器中等待调度
+        :param event_type: 事件类型
+        :param func: 被调度函数
+        """
+        if isinstance(event_type, EventType):
+            event_type = event_type.value
+        if not self._handler_map.event:
+            self._handler_map.event = {}
+        self._handler_map.event[event_type] = func
+
     def register_reaction_event(self,
                                 island_id_list: set,
                                 channel_id_list: set,
@@ -168,4 +193,5 @@ class EventHandler:
         :param reaction_type: 反应类型（0-删除 1-新增）
         :return:
         """
+        warnings.warn("这个方法暂时被废弃，归并到on_event中", DeprecationWarning)
         ...

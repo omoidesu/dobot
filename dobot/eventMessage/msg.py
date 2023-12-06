@@ -20,6 +20,41 @@ from dobot.eventMessage.message.videoMsg import VideoMsg
 
 
 class Msg:
+    """
+    内置属性：
+        这部分的内容是类中自带的属性，直接用类的实例 + . + 属性名 即可获取，根据事件消息的不同可能个别属性没有值
+        island_source_id: 群Id
+        channel_id: 频道Id
+        dodo_source_id: 消息发送人ID
+        message_id: 消息ID
+        personal: 消息发送人信息
+            nick_name: 发送人名称
+            avatar_url: 发送人头像
+            sex: 发送人性别 -1：保密，0：女，1：男
+        member: 消息发送人群内信息
+            nick_name: 发送人名称
+            join_time: 发送人加入群时间
+        reference: 消息引用信息
+            messageId: 引用消息ID
+            dodoSourceId: 引用消息发送人ID
+            nickName: 引用消息发送人名称
+        messageType: 消息类型
+        massageBody: 消息主体
+            具体内容查看message文件夹对应类型.py文件
+
+        mention: 获取消息里面的的@信息
+        pre_mention: 获取消息指令之前的@信息 比如 @bot .ping 返回的是被@的bot的ID
+
+    内置方法：
+        send: 发送消息
+        reply: 回复消息
+        edit: 编辑消息
+        delete: 撤回消息
+        top: 置顶消息
+        cancel_top: 取消置顶
+        add_reaction: 给消息添加表情反应
+        remove_reaction: 移除消息的表情反应
+    """
 
     @staticmethod
     def parseMsg(message_type: int, event_body: dict) -> BaseMsg:
@@ -38,7 +73,7 @@ class Msg:
         elif message_type == 7:
             return RedPacketMsg(event_body.get('messageBody', {}))
         else:
-            raise ValueError(f"Invalid Message Type! need 1-7 but {message_type} was given")
+            return BaseMsg()
 
     def __init__(self, event_body: dict):
         """
@@ -95,7 +130,25 @@ class Msg:
         """
         return self.body.pre_mention
 
-    async def reply(self, content: Union[str, BaseMsg]):
+    async def send(self,
+                   content: Union[str, BaseMsg],
+                   at_sender: bool = False):
+        if at_sender:
+            content = f"<@!{self.dodo_source_id}> {content}" if isinstance(content, str) else content
+        res: dict = await self.body.send(content)
+        _event_body = res.get('data', {})
+        _event_body['messageType'] = MessageType.TEXT.value if isinstance(content, str) else content._MESSAGE_TYPE
+        _event_body['channelId'] = self.ctx.channel.id
+        _event_body['islandSourceId'] = self.ctx.island.id
+        _event_body['dodoSourceId'] = AuthInfo.get_instance().me
+
+        return Msg(_event_body)
+
+    async def reply(self,
+                    content: Union[str, BaseMsg],
+                   at_sender: bool = False):
+        if at_sender:
+            content = f"<@!{self.dodo_source_id}> {content}" if isinstance(content, str) else content
         res: dict = await self.body.reply(content)
         _event_body = res.get('data', {})
         _event_body['messageType'] = MessageType.TEXT.value if isinstance(content, str) else content._MESSAGE_TYPE

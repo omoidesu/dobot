@@ -1,8 +1,9 @@
 from typing import Union
+import warnings
 
 from dobot.cert import AuthInfo
 from dobot.client import Client
-from dobot.const import Route
+from dobot.const import Route, EventType
 from dobot.eventMessage.msg import Msg
 from dobot.exception import ApiRequestError, RequestError
 from dobot.handler import EventHandler
@@ -54,6 +55,22 @@ class Bot(AsyncRegisterObject):
 
         return decorator
 
+    def on_event(self, event_type: EventType):
+        """
+        其余事件的装饰器方法，用于处理服务器事件的业务
+        :param event_type: 事件的类型
+        """
+
+        def decorator(func):
+            async def wrapper(msg: Msg, *args, **kwargs):
+                res = await func(msg, *args, **kwargs)
+                return res
+
+            self.__handler.register_event(event_type, wrapper)
+            return wrapper
+
+        return decorator
+
     def on_reaction(self,
                     island_id_list: Union[list, tuple] = ("*",),
                     channel_id_list: Union[list, tuple] = ("*",),
@@ -67,6 +84,7 @@ class Bot(AsyncRegisterObject):
         :param reaction_type: 反应类型（0-删除 1-新增）
         :return:
         """
+        warnings.warn("这个方法暂时被废弃，归并到on_event中", DeprecationWarning)
 
         def decorator(func):
             async def wrapper(msg: Msg, *args, **kwargs):

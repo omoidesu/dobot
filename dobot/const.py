@@ -260,7 +260,7 @@ class EventType(Enum):
     POST_PUBLISH = '6001'  # 帖子发布事件
     POST_COMMENT_REPLY = '6002'  # 帖子评论回复事件
     # 成员
-    MEMBER_JOIN = 4001  # 成员加入事件
+    MEMBER_JOIN = '4001'  # 成员加入事件
     MEMBER_EXIT = '4002'  # 成员退出事件
     MEMBER_INVITATION = '4003'  # 成员邀请事件
     # 赠礼系统

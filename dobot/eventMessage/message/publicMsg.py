@@ -22,12 +22,12 @@ class PublicMsg(BaseMsg):
     _client: Client
 
     def __init__(self, message_body=None, content: str = ''):
+        super().__init__()
         if message_body is None:
             message_body = {}
         self._content = Content(message_body.get('content', ''))
         if content:
             self._content = Content(content)
-        self._client = Client()
 
     def dict(self):
         return {
@@ -51,6 +51,18 @@ class PublicMsg(BaseMsg):
         获取消息prefix之前的@信息
         """
         return self._content.pre_mention
+
+    async def send(self, content: Union[str, BaseMsg]) -> dict:
+        if isinstance(content, str):
+            content = PublicMsg(content=content)
+
+        kwargs = {
+            'channelId': self.ctx.channel.id,
+            'messageType': content._MESSAGE_TYPE,
+            'messageBody': content.dict()
+        }
+
+        return await self._client.send_public_message(**kwargs)
 
     async def reply(self, content: Union[str, BaseMsg]) -> dict:
         if isinstance(content, str):

@@ -8,6 +8,7 @@ class ShareMsg(BaseMsg):
     _ctx: Context
 
     def __init__(self, message_body: dict):
+        super().__init__()
         self._jump_url = message_body.get('jumpUrl', '')
 
     @property

@@ -9,6 +9,7 @@ class CardMsg(BaseMsg):
     _ctx: Context
 
     def __init__(self, message_body: dict):
+        super().__init__()
         self._content = Content(message_body.get('content', ''))
         self._card = message_body.get('card', '')
 

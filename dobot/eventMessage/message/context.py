@@ -9,6 +9,7 @@ class Context:
     _user: User
 
     def __init__(self, island: Island, channel: Channel, user: User):
+        super().__init__()
         self._island = island
         self._channel = channel
         self._user = user
