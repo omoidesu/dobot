@@ -17,6 +17,8 @@ from dobot.eventMessage.message.publicMsg import PublicMsg
 from dobot.eventMessage.message.redPacketMsg import RedPacketMsg
 from dobot.eventMessage.message.shareMsg import ShareMsg
 from dobot.eventMessage.message.videoMsg import VideoMsg
+from dobot.file.file.image import Image
+from dobot.functional import CachedClass
 
 
 class Msg:
@@ -131,10 +133,13 @@ class Msg:
         return self.body.pre_mention
 
     async def send(self,
-                   content: Union[str, BaseMsg],
+                   content: Union[str, BaseMsg, Image, CachedClass],
                    at_sender: bool = False):
         if at_sender:
             content = f"<@!{self.dodo_source_id}> {content}" if isinstance(content, str) else content
+        if isinstance(content, Image):
+            content: Image
+            content: BaseMsg = ImageMsg(url=await content.url, height=await content.height, width=await content.width)
         res: dict = await self.body.send(content)
         _event_body = res.get('data', {})
         _event_body['messageType'] = MessageType.TEXT.value if isinstance(content, str) else content._MESSAGE_TYPE
@@ -145,10 +150,13 @@ class Msg:
         return Msg(_event_body)
 
     async def reply(self,
-                    content: Union[str, BaseMsg],
-                   at_sender: bool = False):
+                    content: Union[str, BaseMsg, Image, CachedClass],
+                    at_sender: bool = False):
         if at_sender:
             content = f"<@!{self.dodo_source_id}> {content}" if isinstance(content, str) else content
+        if isinstance(content, Image):
+            content: Image
+            content: BaseMsg = ImageMsg(url=await content.url, height=await content.height, width=await content.width)
         res: dict = await self.body.reply(content)
         _event_body = res.get('data', {})
         _event_body['messageType'] = MessageType.TEXT.value if isinstance(content, str) else content._MESSAGE_TYPE

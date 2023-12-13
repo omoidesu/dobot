@@ -7,12 +7,26 @@ class ImageMsg(BaseMsg):
     _MESSAGE_TYPE = MessageType.IMAGE.value
     _ctx: Context
 
-    def __init__(self, message_body: dict):
+    def __init__(self, message_body: dict = None, url: str = '', width: int = 0, height: int = 0, is_original: int = 1):
         super().__init__()
-        self._url = message_body.get('url', '')
-        self._width = message_body.get('width', 0)
-        self._height = message_body.get('height', 0)
-        self._is_original = message_body.get('isOriginal', 0)
+        if message_body is not None:
+            self._url = message_body.get('url', '')
+            self._width = message_body.get('width', 0)
+            self._height = message_body.get('height', 0)
+            self._is_original = message_body.get('isOriginal', 1)
+        else:
+            self._url = url
+            self._width = width
+            self._height = height
+            self._is_original = is_original
+
+    def dict(self):
+        return {
+            "url": self._url,
+            "width": self._width,
+            "height": self._height,
+            "isOriginal": self._is_original
+        }
 
     @property
     def url(self):

@@ -1,4 +1,5 @@
 import asyncio
+import copy
 import json
 
 from aiohttp import ClientSession
@@ -48,7 +49,7 @@ class HttpRequester(LogAbstractObject):
     async def request(self, route: str, **kwargs):
         @self.async_time_logger_wrapper(self._print_time_logger)
         async def do_request(route: str, **kwargs):
-            _headers = AuthInfo.get_instance().header
+            _headers = copy.deepcopy(AuthInfo.get_instance().header)
             _type = kwargs.pop("_type", None)
             if _type is not None and _type == "form-data":
                 """

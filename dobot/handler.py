@@ -141,7 +141,7 @@ class EventHandler:
         if _msg_content != '':
             awaitable_func: Union[DispatchMethod, bool] = self._handler_map.msg.get(msg.body.content.prefix, False)
             if not awaitable_func:
-                raise Exception("Dont fetch cmd")
+                raise Exception("No cmd set matched")
             if awaitable_func.at_flag:
                 # 如果是需要atbot才能用，需要校验pre_mention里有没有bot的id
                 if self.__auth_info.me not in msg.pre_mention:

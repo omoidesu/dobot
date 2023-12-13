@@ -2,7 +2,6 @@ import copy
 import os.path
 from typing import Union
 
-
 class CachedProperty:
     """
     这是个装饰器，作用是把被装饰的方法变成只读的，并且缓存第一次拿到的数据，后面再拿就直接从缓存里拿了
@@ -125,4 +124,28 @@ class SingleClass:
         return self._instance
 
     def __instancecheck__(self, other):
-        return isinstance(other, self.cls)
+        return isinstance(other, self._real_cls)
+
+
+def absolute_path(func):
+    def wrapper(self, path):
+        if isinstance(path, str):
+            _abs_path = os.path.abspath(path)
+            _abs_path = _abs_path.replace('\\', '/')
+        else:
+            _abs_path = path
+        return func(self, _abs_path)
+
+    return wrapper
+
+
+def async_absolute_path(func):
+    async def wrapper(self, path):
+        if isinstance(path, str):
+            _abs_path = os.path.abspath(path)
+            _abs_path = _abs_path.replace('\\', '/')
+        else:
+            _abs_path = path
+        return await func(self, _abs_path)
+
+    return wrapper

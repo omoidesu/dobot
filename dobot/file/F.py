@@ -9,7 +9,7 @@ from dobot.client import Client
 from dobot.exception.argumentError import ArgumentError
 from dobot.file.file.file import File
 from dobot.file.file.image import Image
-from dobot.functional import SingleClass
+from dobot.functional import SingleClass, async_absolute_path
 
 
 @SingleClass
@@ -29,19 +29,8 @@ class F:
             image_binary = await file.read()
             return image_binary
 
-    @staticmethod
-    def __async_absolute_path(func):
-        async def wrapper(self, path: Union[str, Image]):
-            if isinstance(path, str):
-                _abs_path = os.path.abspath(path)
-                _abs_path = _abs_path.replace('\\', '/')
-            else:
-                _abs_path = path
-            return await func(self, _abs_path)
 
-        return wrapper
-
-    @__async_absolute_path
+    @async_absolute_path
     async def upload_image(self, file: Union[str, Image]):
         """
         单个图片的上传功能
@@ -58,7 +47,7 @@ class F:
         img: Image = await img.upload()
         return img
 
-    @__async_absolute_path
+    @async_absolute_path
     async def __upload_image(self, file: Union[str, Image]):
         _key = file if isinstance(file, str) else file.path
         try:
