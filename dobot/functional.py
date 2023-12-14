@@ -6,6 +6,8 @@ from typing import Union
 class CachedProperty:
     """
     这是个装饰器，作用是把被装饰的方法变成只读的，并且缓存第一次拿到的数据，后面再拿就直接从缓存里拿了
+    实际上，CachedProperty类是一个装饰类，它的实例是一个描述符，它的__get__方法会被调用，而不是CachedProperty类的__call__方法
+    同时这个类可以把被装饰的方法变成一个类的property，调用的时候不是通过a.b()而是直接a.b就可以了
     """
     name = None
 
