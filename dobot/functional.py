@@ -1,5 +1,6 @@
 import copy
 import os.path
+from functools import wraps
 from typing import Union
 
 class CachedProperty:
@@ -55,9 +56,9 @@ class CachedClass:
             self.test_arg = test_arg
 
     # 启用单例模式
-    test_instance_1 = Test("test_arg", _label="label_1")
-    test_instance_2 = Test("test_arg", _label="label_12345")
-    test_instance_3 = Test("test_arg", _label="label_1")
+    test_instance_1 = Test("test_arg", _path_label="label_1")
+    test_instance_2 = Test("test_arg", _path_label="label_12345")
+    test_instance_3 = Test("test_arg", _path_label="label_1")
     # 不启用单例模式
     test_not_instance = Test("test_arg")
 
@@ -128,6 +129,7 @@ class SingleClass:
 
 
 def absolute_path(func):
+    @wraps(func)
     def wrapper(self, path):
         if isinstance(path, str):
             _abs_path = os.path.abspath(path)
@@ -140,6 +142,7 @@ def absolute_path(func):
 
 
 def async_absolute_path(func):
+    @wraps(func)
     async def wrapper(self, path):
         if isinstance(path, str):
             _abs_path = os.path.abspath(path)

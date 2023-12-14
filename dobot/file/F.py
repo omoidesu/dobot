@@ -63,7 +63,6 @@ class F:
         批量上传图片，默认走单线程异步调用，所以会比for循环调用快很多
         :param file_list: 文件的list，list里面的类型可以是文件路径，也可以是Image对象，但是推荐从R中的get_image_by_path或者get_image拿到图片后再调用这个方法
         """
-        # if any(abs_path.lower().endswith(ext) for ext in PICTURE_SUFFIX):
         # noinspection PyTypeChecker
         if any(isinstance(item, str) for item in file_list):
             # 如果全是字符串的情况，将路径变为绝对路径，生成新的file_list

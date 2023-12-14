@@ -23,27 +23,46 @@ async def ping(msg: Msg):
   """
   业务主体
   """
-  # # 回复消息
-  # reply_message: Msg = await msg.reply("pong!")
-  # # 给回复的消息添加回应
-  # await reply_message.add_reaction("👍")
-  # # 移除表情
-  # await reply_message.remove_reaction("👍")
-  # # 修改消息
-  # await reply_message.edit("我现在不是pong了")
-  # # 置顶消息
-  # await reply_message.top()
-  # # 取消置顶
-  # await reply_message.cancel_top()
-  # # 撤回消息
-  # await reply_message.delete("我撤回了略略略")
+  # 回复消息
+  reply_message: Msg = await msg.reply("pong!")
+  # 给回复的消息添加回应
+  await reply_message.add_reaction("👍")
+  # 移除表情
+  await reply_message.remove_reaction("👍")
+  # 修改消息
+  await reply_message.edit("我现在不是pong了")
+  # 置顶消息
+  await reply_message.top()
+  # 取消置顶
+  await reply_message.cancel_top()
+  # 撤回消息
+  await reply_message.delete("我撤回了略略略")
+  # 发送图片
   r = R()
   await r.add_path(r"D:\PyCode\dodo.py\test1")
   res: Image = r.get_image(r"D:\PyCode\dodo.py\test1\111.png")
   await msg.send(res)
+  # 发送卡片
+  card = {
+        "content": "",
+        "card": {
+            "type": "card",
+            "theme": "grey",
+            "title": "发送卡片消息",
+            "components": [{
+                    "type": "section",
+                    "text": {
+                        "type": "dodo-md",
+                        "content": "卡片文本内容"
+                    }
+                }
+            ]
+        }
+    }
+  await msg.send_card(card)
 
 @bot.on_event(event_type=EventType.EMOJI_REACTION)
-async def on_ready(msg: Msg):
+async def reaction(msg: Msg):
   await msg.send("谁让你给我表情反应了", at_sender=True)
 
 

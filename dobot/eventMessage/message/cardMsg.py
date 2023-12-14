@@ -13,6 +13,12 @@ class CardMsg(BaseMsg):
         self._content = Content(message_body.get('content', ''))
         self._card = message_body.get('card', '')
 
+    def dict(self):
+        return {
+            "content": self._content,
+            "card": self._card
+        }
+
     @property
     def content(self):
         return self._content

@@ -49,6 +49,7 @@ class Msg:
 
     内置方法：
         send: 发送消息
+        send_card: 发送卡片信息（需要传入卡片json）
         reply: 回复消息
         edit: 编辑消息
         delete: 撤回消息
@@ -63,7 +64,7 @@ class Msg:
         if message_type == 1:
             return PublicMsg(event_body.get('messageBody', {}))
         elif message_type == 2:
-            return ImageMsg(event_body.get('messageBody', {}))
+            return ImageMsg(**event_body.get('messageBody', {}))
         elif message_type == 3:
             return VideoMsg(event_body.get('messageBody', {}))
         elif message_type == 4:
@@ -132,61 +133,85 @@ class Msg:
         """
         return self.body.pre_mention
 
+    def __return_send_msg(self, res: dict, content):
+        _event_body = res.get('data', {})
+        _event_body['messageType'] = MessageType.TEXT.value if isinstance(content, str) else content._MESSAGE_TYPE
+        _event_body['channelId'] = self.ctx.channel.id
+        _event_body['islandSourceId'] = self.ctx.island.id
+        _event_body['dodoSourceId'] = AuthInfo.get_instance().me
+
+        return Msg(_event_body)
+
     async def send(self,
                    content: Union[str, BaseMsg, Image, CachedClass],
                    at_sender: bool = False):
+        """
+        发送信息
+        """
         if at_sender:
             content = f"<@!{self.dodo_source_id}> {content}" if isinstance(content, str) else content
         if isinstance(content, Image):
             content: Image
             content: BaseMsg = ImageMsg(url=await content.url, height=await content.height, width=await content.width)
         res: dict = await self.body.send(content)
-        _event_body = res.get('data', {})
-        _event_body['messageType'] = MessageType.TEXT.value if isinstance(content, str) else content._MESSAGE_TYPE
-        _event_body['channelId'] = self.ctx.channel.id
-        _event_body['islandSourceId'] = self.ctx.island.id
-        _event_body['dodoSourceId'] = AuthInfo.get_instance().me
+        return self.__return_send_msg(res, content)
 
-        return Msg(_event_body)
+    async def send_card(self,
+                   content: dict):
+        """
+        发送卡片，需要传入json卡片参数
+        """
+        content: BaseMsg = CardMsg(content)
+        res: dict = await self.body.send(content)
+        return self.__return_send_msg(res, content)
 
     async def reply(self,
                     content: Union[str, BaseMsg, Image, CachedClass],
                     at_sender: bool = False):
+        """
+        回复消息
+        """
         if at_sender:
             content = f"<@!{self.dodo_source_id}> {content}" if isinstance(content, str) else content
         if isinstance(content, Image):
             content: Image
             content: BaseMsg = ImageMsg(url=await content.url, height=await content.height, width=await content.width)
         res: dict = await self.body.reply(content)
-        _event_body = res.get('data', {})
-        _event_body['messageType'] = MessageType.TEXT.value if isinstance(content, str) else content._MESSAGE_TYPE
-        _event_body['channelId'] = self.ctx.channel.id
-        _event_body['islandSourceId'] = self.ctx.island.id
-        _event_body['dodoSourceId'] = AuthInfo.get_instance().me
-
-        return Msg(_event_body)
+        return self.__return_send_msg(res, content)
 
     async def edit(self, content: Union[str, BaseMsg]):
+        """
+        编辑消息
+        """
         res: dict = await self.body.edit(content)
-        _event_body = res.get('data', {})
-        _event_body['messageType'] = MessageType.TEXT.value if isinstance(content, str) else content._MESSAGE_TYPE
-        _event_body['channelId'] = self.ctx.channel.id
-        _event_body['islandSourceId'] = self.ctx.island.id
-        _event_body['dodoSourceId'] = AuthInfo.get_instance().me
-
-        return Msg(_event_body)
+        return self.__return_send_msg(res, content)
 
     async def delete(self, reason: str, message_id: str = None):
+        """
+        删除消息
+        """
         return await self.body.delete(reason, message_id)
 
     async def top(self):
+        """
+        置顶消息
+        """
         return await self.body.top()
 
     async def cancel_top(self):
+        """
+        取消置顶
+        """
         return await self.body.cancel_top()
 
     async def add_reaction(self, emoji: str):
+        """
+        添加表情反应
+        """
         return await self.body.add_reaction(emoji)
 
     async def remove_reaction(self, emoji: str):
+        """
+        取消表情反应
+        """
         return await self.body.remove_reaction(emoji)
